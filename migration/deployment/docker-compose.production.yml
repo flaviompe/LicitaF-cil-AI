@@ -1,0 +1,731 @@
+# Production Docker Compose for Blue-Green Deployment
+# SQLite to Neon PostgreSQL Migration
+version: '3.8'
+
+# ==================================================================
+# NETWORKS
+# ==================================================================
+networks:
+  blue_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+  
+  green_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
+  
+  monitoring_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          gateway: 172.22.0.1
+
+# ==================================================================
+# VOLUMES
+# ==================================================================
+volumes:
+  blue_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/licitacoes/data/blue
+  
+  green_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/licitacoes/data/green
+  
+  nginx_conf:
+    driver: local
+  
+  redis_data:
+    driver: local
+  
+  prometheus_data:
+    driver: local
+  
+  grafana_data:
+    driver: local
+
+# ==================================================================
+# SERVICES
+# ==================================================================
+services:
+  
+  # ==============================================================
+  # BLUE ENVIRONMENT (Current Production - SQLite)
+  # ==============================================================
+  
+  blue-app-1:
+    image: licitacoes:blue-latest
+    container_name: blue-app-1
+    hostname: blue-app-1
+    networks:
+      - blue_network
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:///data/production.db
+      - REDIS_URL=redis://redis:6379/0
+      - APP_INSTANCE=1
+      - APP_PORT=8000
+    volumes:
+      - blue_data:/data
+      - /opt/licitacoes/logs:/app/logs
+    ports:
+      - "8001:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  blue-app-2:
+    image: licitacoes:blue-latest
+    container_name: blue-app-2
+    hostname: blue-app-2
+    networks:
+      - blue_network
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:///data/production.db
+      - REDIS_URL=redis://redis:6379/0
+      - APP_INSTANCE=2
+      - APP_PORT=8000
+    volumes:
+      - blue_data:/data
+      - /opt/licitacoes/logs:/app/logs
+    ports:
+      - "8002:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  blue-app-3:
+    image: licitacoes:blue-latest
+    container_name: blue-app-3
+    hostname: blue-app-3
+    networks:
+      - blue_network
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:///data/production.db
+      - REDIS_URL=redis://redis:6379/0
+      - APP_INSTANCE=3
+      - APP_PORT=8000
+    volumes:
+      - blue_data:/data
+      - /opt/licitacoes/logs:/app/logs
+    ports:
+      - "8003:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  # ==============================================================
+  # GREEN ENVIRONMENT (New Production - Neon PostgreSQL)
+  # ==============================================================
+  
+  green-app-1:
+    image: licitacoes:green-latest
+    container_name: green-app-1
+    hostname: green-app-1
+    networks:
+      - green_network
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=${NEON_DATABASE_URL}
+      - DIRECT_URL=${NEON_DIRECT_URL}
+      - REDIS_URL=redis://redis:6379/0
+      - APP_INSTANCE=1
+      - APP_PORT=8000
+      - ENABLE_PERFORMANCE_MONITORING=true
+      - CACHE_ENABLED=true
+      - CONNECTION_POOL_SIZE=25
+      - CONNECTION_POOL_MAX_OVERFLOW=35
+    volumes:
+      - green_data:/data
+      - /opt/licitacoes/logs:/app/logs
+    ports:
+      - "8101:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  green-app-2:
+    image: licitacoes:green-latest
+    container_name: green-app-2
+    hostname: green-app-2
+    networks:
+      - green_network
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=${NEON_DATABASE_URL}
+      - DIRECT_URL=${NEON_DIRECT_URL}
+      - REDIS_URL=redis://redis:6379/0
+      - APP_INSTANCE=2
+      - APP_PORT=8000
+      - ENABLE_PERFORMANCE_MONITORING=true
+      - CACHE_ENABLED=true
+      - CONNECTION_POOL_SIZE=25
+      - CONNECTION_POOL_MAX_OVERFLOW=35
+    volumes:
+      - green_data:/data
+      - /opt/licitacoes/logs:/app/logs
+    ports:
+      - "8102:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  green-app-3:
+    image: licitacoes:green-latest
+    container_name: green-app-3
+    hostname: green-app-3
+    networks:
+      - green_network
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=${NEON_DATABASE_URL}
+      - DIRECT_URL=${NEON_DIRECT_URL}
+      - REDIS_URL=redis://redis:6379/0
+      - APP_INSTANCE=3
+      - APP_PORT=8000
+      - ENABLE_PERFORMANCE_MONITORING=true
+      - CACHE_ENABLED=true
+      - CONNECTION_POOL_SIZE=25
+      - CONNECTION_POOL_MAX_OVERFLOW=35
+    volumes:
+      - green_data:/data
+      - /opt/licitacoes/logs:/app/logs
+    ports:
+      - "8103:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  # ==============================================================
+  # LOAD BALANCER AND REVERSE PROXY
+  # ==============================================================
+  
+  haproxy:
+    image: haproxy:2.8-alpine
+    container_name: haproxy-lb
+    hostname: haproxy
+    networks:
+      - blue_network
+      - green_network
+      - monitoring_network
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8404:8404"  # HAProxy stats
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./haproxy/ssl:/etc/ssl/certs:ro
+      - /var/run/haproxy.sock:/var/run/haproxy.sock
+    environment:
+      - BLUE_BACKEND_WEIGHT=100
+      - GREEN_BACKEND_WEIGHT=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8404/stats"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: nginx-proxy
+    hostname: nginx
+    networks:
+      - blue_network
+      - green_network
+      - monitoring_network
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx_conf:/etc/nginx/conf.d
+    depends_on:
+      - haproxy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/nginx-health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "5"
+  
+  # ==============================================================
+  # SHARED SERVICES
+  # ==============================================================
+  
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    hostname: redis
+    networks:
+      - blue_network
+      - green_network
+      - monitoring_network
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_MAXMEMORY=2gb
+      - REDIS_MAXMEMORY_POLICY=allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+  
+  # ==============================================================
+  # MONITORING AND OBSERVABILITY
+  # ==============================================================
+  
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: prometheus
+    hostname: prometheus
+    networks:
+      - monitoring_network
+      - blue_network
+      - green_network
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts:/etc/prometheus/alerts:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+  
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: grafana
+    hostname: grafana
+    networks:
+      - monitoring_network
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin123}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000/
+      - GF_INSTALL_PLUGINS=redis-datasource,postgres-datasource
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+  
+  node-exporter:
+    image: prom/node-exporter:v1.6.0
+    container_name: node-exporter
+    hostname: node-exporter
+    networks:
+      - monitoring_network
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: cadvisor
+    hostname: cadvisor
+    networks:
+      - monitoring_network
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+  
+  # ==============================================================
+  # DEPLOYMENT AUTOMATION AND HEALTH CHECKING
+  # ==============================================================
+  
+  deployment-controller:
+    image: licitacoes:deployment-controller
+    container_name: deployment-controller
+    hostname: deployment-controller
+    networks:
+      - blue_network
+      - green_network
+      - monitoring_network
+    environment:
+      - BLUE_BACKEND_URL=http://blue-app-1:8000,http://blue-app-2:8000,http://blue-app-3:8000
+      - GREEN_BACKEND_URL=http://green-app-1:8000,http://green-app-2:8000,http://green-app-3:8000
+      - HAPROXY_STATS_URL=http://haproxy:8404
+      - MONITORING_URL=http://prometheus:9090
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./deployment:/deployment:ro
+      - /var/log/licitacoes:/var/log/licitacoes
+    command: python3 /deployment/blue_green_deployment.py
+    depends_on:
+      - haproxy
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "3"
+  
+  health-checker:
+    image: licitacoes:health-checker
+    container_name: health-checker
+    hostname: health-checker
+    networks:
+      - blue_network
+      - green_network
+      - monitoring_network
+    environment:
+      - CHECK_INTERVAL=30
+      - ALERT_THRESHOLD=3
+      - PROMETHEUS_URL=http://prometheus:9090
+    volumes:
+      - ./monitoring/health-checks:/health-checks:ro
+    command: python3 /health-checks/health_monitor.py
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+        reservations:
+          memory: 256M
+          cpus: '0.1'
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+# ==================================================================
+# PROFILES FOR DIFFERENT DEPLOYMENT STAGES
+# ==================================================================
+
+# Profile for blue environment only (current production)
+# Usage: docker-compose --profile blue up -d
+x-blue-profile: &blue-profile
+  profiles:
+    - blue
+    - all
+
+# Profile for green environment only (new production)  
+# Usage: docker-compose --profile green up -d
+x-green-profile: &green-profile
+  profiles:
+    - green
+    - all
+
+# Profile for monitoring services
+# Usage: docker-compose --profile monitoring up -d
+x-monitoring-profile: &monitoring-profile
+  profiles:
+    - monitoring
+    - all
+
+# ==================================================================
+# SERVICE EXTENSIONS FOR PROFILES
+# ==================================================================
+
+# Apply profiles to blue services
+x-blue-services:
+  - &blue-service-1
+    <<: *blue-profile
+  - &blue-service-2
+    <<: *blue-profile  
+  - &blue-service-3
+    <<: *blue-profile
+
+# Apply profiles to green services
+x-green-services:
+  - &green-service-1
+    <<: *green-profile
+  - &green-service-2
+    <<: *green-profile
+  - &green-service-3
+    <<: *green-profile
+
+# ==================================================================
+# CONFIGURATION EXAMPLES
+# ==================================================================
+
+# Example commands for different deployment scenarios:
+#
+# 1. Start only blue environment (current production):
+#    docker-compose --profile blue up -d
+#
+# 2. Start only green environment (new production):
+#    docker-compose --profile green up -d
+#
+# 3. Start both environments for blue-green deployment:
+#    docker-compose --profile all up -d
+#
+# 4. Start only monitoring stack:
+#    docker-compose --profile monitoring up -d
+#
+# 5. Scale green environment during deployment:
+#    docker-compose up -d --scale green-app-1=2 --scale green-app-2=2 --scale green-app-3=2
+#
+# 6. Rolling update of green environment:
+#    docker-compose up -d --no-deps green-app-1
+#    docker-compose up -d --no-deps green-app-2  
+#    docker-compose up -d --no-deps green-app-3

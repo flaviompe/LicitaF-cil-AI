@@ -1,0 +1,225 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts    Account[]
+  sessions    Session[]
+  company     Company?
+  proposals   Proposal[]
+  certificates Certificate[]
+  notifications Notification[]
+}
+
+model Company {
+  id              String   @id @default(cuid())
+  cnpj            String   @unique
+  name            String
+  fantasyName     String?
+  email           String
+  phone           String?
+  address         String?
+  city            String?
+  state           String?
+  zipCode         String?
+  businessType    String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId      String @unique
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  opportunities Opportunity[]
+  proposals     Proposal[]
+  certificates  Certificate[]
+}
+
+model Opportunity {
+  id              String            @id @default(cuid())
+  title           String
+  description     String            @db.Text
+  editalNumber    String
+  organ           String
+  publishDate     DateTime
+  openingDate     DateTime
+  closingDate     DateTime?
+  bidType         BidType
+  status          OpportunityStatus @default(OPEN)
+  editalLink      String?
+  estimatedValue  Float?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  proposals Proposal[]
+}
+
+model Proposal {
+  id             String         @id @default(cuid())
+  proposalDate   DateTime
+  proposedValue  Float
+  status         ProposalStatus @default(PENDING)
+  result         String?
+  observations   String?        @db.Text
+  documents      String[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Certificate {
+  id           String            @id @default(cuid())
+  type         CertificateType
+  issuer       String
+  issueDate    DateTime
+  expiryDate   DateTime
+  status       CertificateStatus @default(VALID)
+  documentUrl  String?
+  observations String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  title     String
+  message   String           @db.Text
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+  JURIDICO
+  COMERCIAL
+  TECNICO
+  FINANCEIRO
+  COLABORADOR_EXTERNO
+}
+
+enum BidType {
+  PREGAO_ELETRONICO
+  PREGAO_PRESENCIAL
+  CONCORRENCIA
+  TOMADA_PRECOS
+  CONVITE
+  DISPENSA
+  INEXIGIBILIDADE
+}
+
+enum OpportunityStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+  SUSPENDED
+}
+
+enum ProposalStatus {
+  PENDING
+  SUBMITTED
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+enum CertificateType {
+  RECEITA_FEDERAL
+  FGTS
+  INSS
+  TRABALHISTA
+  ESTADUAL
+  MUNICIPAL
+  ANVISA
+  CREA
+  OTHER
+}
+
+enum CertificateStatus {
+  VALID
+  EXPIRED
+  EXPIRING_SOON
+  INVALID
+}
+
+enum NotificationType {
+  OPPORTUNITY
+  CERTIFICATE_EXPIRY
+  PROPOSAL_UPDATE
+  SYSTEM
+}

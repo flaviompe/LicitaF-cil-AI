@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LicitaFácil Pro - Dashboard Moderno</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .status-open { border-left: 4px solid #10b981; }
+        .status-analyzing { border-left: 4px solid #3b82f6; }
+        .status-pending { border-left: 4px solid #f59e0b; }
+        
+        .view-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+        .view-list { display: block; }
+        .view-kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading" class="fixed inset-0 bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center z-50">
+        <div class="text-center text-white">
+            <div class="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <h2 class="text-2xl font-bold">🏛️ LicitaFácil Pro</h2>
+            <p class="text-lg opacity-90">Carregando dashboard moderno...</p>
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="hidden min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fade-in">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold gradient-text mb-2">🏛️ LicitaFácil Pro</h1>
+                <p class="text-gray-600">Sua plataforma inteligente para licitações</p>
+            </div>
+            
+            <div class="space-y-4">
+                <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email" value="empresa@demo.com">
+                <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Senha" value="Demo@2024">
+                <button onclick="login()" class="w-full py-3 btn-primary text-white font-semibold rounded-lg">
+                    Entrar no Dashboard
+                </button>
+            </div>
+            
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <p class="text-sm text-blue-800 font-medium mb-2">🔐 Contas Demo:</p>
+                <div class="text-xs text-blue-700 space-y-1">
+                    <div>📧 empresa@demo.com | 🔑 Demo@2024</div>
+                    <div>📧 admin@licitafacil.com | 🔑 Admin@2024</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden min-h-screen bg-gray-50">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-2xl font-bold gradient-text">🏛️ LicitaFácil Pro</h1>
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">v2.0</span>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+                        🔔
+                    </button>
+                    <button class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+                        ⚙️
+                    </button>
+                    <button onclick="logout()" class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
+                        🚪
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <aside class="w-64 bg-white border-r border-gray-200 min-h-screen">
+                <nav class="p-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-blue-50 text-blue-600 font-medium">
+                            📊 <span>Dashboard</span>
+                        </div>
+                        <div class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 cursor-pointer transition-colors">
+                            🎯 <span>Oportunidades</span>
+                        </div>
+                        <div class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 cursor-pointer transition-colors">
+                            🤖 <span>IA Jurídica</span>
+                        </div>
+                        <div class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 cursor-pointer transition-colors">
+                            📈 <span>Analytics</span>
+                        </div>
+                        <div class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-50 cursor-pointer transition-colors">
+                            ⚙️ <span>Configurações</span>
+                        </div>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Empresas Cadastradas</p>
+                                <p class="text-2xl font-bold text-gray-900 mt-1">2.341</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-blue-100">
+                                <span class="text-blue-600 text-xl">👥</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Licitações Monitoradas</p>
+                                <p class="text-2xl font-bold text-gray-900 mt-1">15.673</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-green-100">
+                                <span class="text-green-600 text-xl">🎯</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Precisão da IA</p>
+                                <p class="text-2xl font-bold text-gray-900 mt-1">94.3%</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-purple-100">
+                                <span class="text-purple-600 text-xl">🧠</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Satisfação</p>
+                                <p class="text-2xl font-bold text-gray-900 mt-1">4.7/5</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-orange-100">
+                                <span class="text-orange-600 text-xl">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Chat -->
+                <div class="bg-white rounded-xl shadow-sm border p-6 mb-8 animate-slide-in">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-lg">🤖</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Consultor Jurídico IA</h3>
+                            <p class="text-sm text-gray-500">Especialista em licitações brasileiras</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <input 
+                                type="text" 
+                                id="chatInput" 
+                                placeholder="Digite sua pergunta jurídica..."
+                                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onkeypress="if(event.key==='Enter') sendQuery()"
+                            >
+                            <button onclick="sendQuery()" class="px-6 py-2 btn-primary text-white font-medium rounded-lg">
+                                Enviar
+                            </button>
+                        </div>
+                        
+                        <div id="chatResponse" class="hidden p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                            <div class="text-sm text-blue-900"></div>
+                        </div>
+                        
+                        <div class="text-xs text-gray-500 space-y-1">
+                            <div><strong>💡 Comandos:</strong></div>
+                            <div><code>/juridico [pergunta]</code> - Análise jurídica</div>
+                            <div><code>/tecnico [pergunta]</code> - Questões técnicas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="bg-white rounded-xl shadow-sm border p-4 mb-6">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
+                                <input
+                                    type="text"
+                                    placeholder="Buscar licitações..."
+                                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-80"
+                                >
+                            </div>
+                            <button class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                🔽 Filtros
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+                            <button onclick="setView('grid')" class="view-btn px-3 py-1 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white">
+                                ⊞ Grid
+                            </button>
+                            <button onclick="setView('list')" class="view-btn px-3 py-1 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-gray-900">
+                                ☰ Lista
+                            </button>
+                            <button onclick="setView('kanban')" class="view-btn px-3 py-1 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-gray-900">
+                                📋 Kanban
+                            </button>
+                            <button onclick="setView('calendar')" class="view-btn px-3 py-1 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-gray-900">
+                                📅 Calendário
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opportunities Grid -->
+                <div id="opportunitiesContainer" class="view-grid">
+                    <!-- Opportunity Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover status-open">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                Aberta
+                            </span>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-500">Score IA</div>
+                                <div class="text-lg font-bold text-green-600">92%</div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-semibold text-gray-900 mb-2">
+                            Pregão Eletrônico - Aquisição de Material de Escritório
+                        </h3>
+                        
+                        <p class="text-sm text-gray-600 mb-3">Prefeitura Municipal de São Paulo</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Valor:</span>
+                                <span class="font-medium text-green-600">R$ 85.000,00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Prazo:</span>
+                                <span class="font-medium">30/12/2024</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Local:</span>
+                                <span class="font-medium">São Paulo/SP</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="flex-1 px-4 py-2 btn-primary text-white text-sm font-medium rounded-lg">
+                                👁️ Ver Detalhes
+                            </button>
+                            <button class="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                                💬
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Opportunity Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover status-analyzing">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                Analisando
+                            </span>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-500">Score IA</div>
+                                <div class="text-lg font-bold text-blue-600">87%</div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-semibold text-gray-900 mb-2">
+                            Concorrência - Obras de Pavimentação
+                        </h3>
+                        
+                        <p class="text-sm text-gray-600 mb-3">Governo do Estado do Rio de Janeiro</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Valor:</span>
+                                <span class="font-medium text-green-600">R$ 2.500.000,00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Prazo:</span>
+                                <span class="font-medium">15/01/2025</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Local:</span>
+                                <span class="font-medium">Rio de Janeiro/RJ</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="flex-1 px-4 py-2 btn-primary text-white text-sm font-medium rounded-lg">
+                                👁️ Ver Detalhes
+                            </button>
+                            <button class="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                                💬
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Opportunity Card 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border p-6 card-hover status-pending">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                                Pendente
+                            </span>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-500">Score IA</div>
+                                <div class="text-lg font-bold text-yellow-600">95%</div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-semibold text-gray-900 mb-2">
+                            Tomada de Preços - Serviços de TI
+                        </h3>
+                        
+                        <p class="text-sm text-gray-600 mb-3">Tribunal de Justiça de Minas Gerais</p>
+                        
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Valor:</span>
+                                <span class="font-medium text-green-600">R$ 750.000,00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Prazo:</span>
+                                <span class="font-medium">08/01/2025</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Local:</span>
+                                <span class="font-medium">Belo Horizonte/MG</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button class="flex-1 px-4 py-2 btn-primary text-white text-sm font-medium rounded-lg">
+                                👁️ Ver Detalhes
+                            </button>
+                            <button class="px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                                💬
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Variables
+        let currentView = 'grid';
+        let isLoggedIn = false;
+
+        // Initialize
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('loginForm').classList.remove('hidden');
+            }, 2000);
+        };
+
+        // Login function
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                isLoggedIn = true;
+                
+                // Simulate backend call
+                fetch('http://localhost:3001/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                }).catch(err => console.log('Backend não conectado:', err));
+            }
+        }
+
+        // Logout function
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        }
+
+        // View switching
+        function setView(view) {
+            currentView = view;
+            
+            // Update button styles
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-gray-600', 'hover:text-gray-900');
+            });
+            
+            event.target.classList.remove('text-gray-600', 'hover:text-gray-900');
+            event.target.classList.add('bg-blue-600', 'text-white');
+            
+            // Update container class
+            const container = document.getElementById('opportunitiesContainer');
+            container.className = `view-${view}`;
+            
+            if (view === 'list') {
+                container.innerHTML = `
+                    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Licitação</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Entidade</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prazo</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score IA</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-900">Material de Escritório</div>
+                                        <div class="text-sm text-gray-500">Material de Consumo</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Prefeitura São Paulo</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-green-600">R$ 85.000</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">30/12/2024</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">Aberta</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-medium text-green-600">92%</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex gap-2">
+                                            <button class="text-blue-600 hover:text-blue-900">👁️</button>
+                                            <button class="text-gray-600 hover:text-gray-900">💬</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm font-medium text-gray-900">Obras Pavimentação</div>
+                                        <div class="text-sm text-gray-500">Obras e Serviços</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Governo RJ</td>
+                                    <td class="px-6 py-4 text-sm font-medium text-green-600">R$ 2.500.000</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">15/01/2025</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">Analisando</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm font-medium text-blue-600">87%</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex gap-2">
+                                            <button class="text-blue-600 hover:text-blue-900">👁️</button>
+                                            <button class="text-gray-600 hover:text-gray-900">💬</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (view === 'kanban') {
+                container.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-gray-900">Abertas</h3>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">1</span>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border p-4">
+                            <h4 class="font-medium mb-2">Material de Escritório</h4>
+                            <p class="text-sm text-gray-600">R$ 85.000</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-gray-900">Analisando</h3>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">1</span>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border p-4">
+                            <h4 class="font-medium mb-2">Obras Pavimentação</h4>
+                            <p class="text-sm text-gray-600">R$ 2.500.000</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-gray-900">Pendentes</h3>
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">1</span>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border p-4">
+                            <h4 class="font-medium mb-2">Serviços de TI</h4>
+                            <p class="text-sm text-gray-600">R$ 750.000</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-gray-900">Concluídas</h3>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">0</span>
+                        </div>
+                    </div>
+                `;
+            } else if (view === 'calendar') {
+                container.innerHTML = `
+                    <div class="bg-white rounded-xl shadow-sm border p-8 text-center">
+                        <div class="text-6xl mb-4">📅</div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Visualização do Calendário</h3>
+                        <p class="text-gray-500">Calendário interativo com prazos das licitações em desenvolvimento.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Chat function
+        async function sendQuery() {
+            const input = document.getElementById('chatInput');
+            const responseDiv = document.getElementById('chatResponse');
+            const queryText = input.value.trim();
+            
+            if (!queryText) return;
+            
+            responseDiv.classList.remove('hidden');
+            responseDiv.innerHTML = '<div class="text-sm text-blue-900">🤖 Analisando sua consulta jurídica...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3001/legal-ai/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ queryText })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        responseDiv.innerHTML = `
+                            <div class="text-sm text-blue-900">
+                                <strong>🤖 Resposta da IA Jurídica:</strong><br><br>
+                                ${data.data.responseText}<br><br>
+                                <small>
+                                    📊 Confiança: ${Math.round(data.data.confidenceScore * 100)}% | 
+                                    ⚖️ Baseado em: Lei 14.133/2021, 8.666/93, LC 123/2006
+                                </small>
+                            </div>
+                        `;
+                    } else {
+                        responseDiv.innerHTML = '<div class="text-sm text-red-600">Erro: ' + (data.message || 'Falha na consulta') + '</div>';
+                    }
+                } else {
+                    throw new Error('Backend não respondeu');
+                }
+            } catch (error) {
+                // Resposta offline inteligente
+                const offlineResponse = getOfflineResponse(queryText);
+                responseDiv.innerHTML = `
+                    <div class="text-sm text-blue-900">
+                        <strong>🤖 Modo Offline - Resposta Básica:</strong><br><br>
+                        ${offlineResponse}<br><br>
+                        <small>
+                            ⚠️ Backend offline. Conecte-se para respostas avançadas da IA.<br>
+                            🔧 Status: Verificando backend em http://localhost:3001
+                        </small>
+                    </div>
+                `;
+            }
+            
+            input.value = '';
+        }
+
+        // Offline response system
+        function getOfflineResponse(query) {
+            const lowerQuery = query.toLowerCase();
+            
+            if (lowerQuery.includes('prazo') && (lowerQuery.includes('recurso') || lowerQuery.includes('pregão'))) {
+                return "📋 **PRAZOS PARA RECURSOS NO PREGÃO:**<br><br>🕐 **3 dias úteis** para interposição de recurso após a sessão pública (art. 44, Lei 10.520/2002)<br><br>⚖️ **Base Legal**: Lei 10.520/2002, art. 44 c/c Decreto 10.024/2019";
+            }
+            
+            if (lowerQuery.includes('mei') || lowerQuery.includes('microempresa') || lowerQuery.includes('me') || lowerQuery.includes('epp')) {
+                return "🏢 **BENEFÍCIOS ME/EPP/MEI:**<br><br>✅ **Margem de empate** de até 10% no preço<br>✅ **Cotas reservadas** de até 25% do valor total<br>✅ **Comprovação posterior** de documentos<br><br>⚖️ **Base Legal**: LC 123/2006, Lei 14.133/2021";
+            }
+            
+            if (lowerQuery.includes('vencer') || lowerQuery.includes('ganhar') || lowerQuery.includes('estratégia')) {
+                return "🏆 **ESTRATÉGIAS PARA VENCER:**<br><br>1. **Escolha certa**: Foque no seu nicho<br>2. **Preço competitivo**: Use benefícios ME/EPP<br>3. **Documentação**: 100% conforme edital<br>4. **Timing**: Participe no momento certo<br><br>💡 **Dica**: Persistência é fundamental!";
+            }
+            
+            if (lowerQuery.includes('documento') || lowerQuery.includes('habilitação')) {
+                return "📋 **DOCUMENTOS OBRIGATÓRIOS:**<br><br>🆔 **Habilitação Jurídica**: CNPJ, contrato social<br>💰 **Qualificação Econômica**: balanço, certidões<br>⚖️ **Regularidade Fiscal**: CND federal, estadual, municipal<br>🏢 **Qualificação Técnica**: atestados, certidões<br><br>⚖️ **Base Legal**: Lei 14.133/2021, arts. 62-88";
+            }
+            
+            return "🤖 **ORIENTAÇÃO JURÍDICA BÁSICA:**<br><br>Para consultas específicas sobre licitações, pergunte sobre:<br><br>• **Prazos** - recursos, impugnações<br>• **ME/EPP** - benefícios e cotas<br>• **Documentação** - habilitação obrigatória<br>• **Estratégias** - como vencer<br><br>💡 **Conecte-se para respostas avançadas da IA!**";
+        }
+    </script>
+</body>
+</html>

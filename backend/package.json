@@ -1,0 +1,17 @@
+{
+  "name": "licitafacil-backend-demo",
+  "version": "1.0.0",
+  "description": "LicitaFácil Pro Backend Demo",
+  "main": "demo-server.js",
+  "scripts": {
+    "start": "node demo-server.js",
+    "dev": "node demo-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "keywords": ["licitacao", "demo", "backend"],
+  "author": "LicitaFácil Pro",
+  "license": "MIT"
+}

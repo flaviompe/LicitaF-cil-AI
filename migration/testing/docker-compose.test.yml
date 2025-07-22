@@ -1,0 +1,131 @@
+# Docker Compose configuration for migration testing
+version: '3.8'
+
+services:
+  # PostgreSQL test database
+  postgres-test:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: test_licitacoes
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=pt_BR.UTF-8 --lc-ctype=pt_BR.UTF-8"
+      TZ: America/Sao_Paulo
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+      - ../scripts:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_licitacoes"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - test_network
+    restart: unless-stopped
+    command: >
+      postgres
+      -c shared_preload_libraries=pg_stat_statements
+      -c pg_stat_statements.track=all
+      -c max_connections=100
+      -c shared_buffers=256MB
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=4MB
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+      -c max_worker_processes=8
+      -c max_parallel_workers_per_gather=4
+      -c max_parallel_workers=8
+      -c max_parallel_maintenance_workers=4
+      -c log_min_messages=warning
+      -c log_statement=none
+      -c timezone='America/Sao_Paulo'
+
+  # Redis for caching tests (optional)
+  redis-test:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_test_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - test_network
+    restart: unless-stopped
+
+  # Test runner service
+  test-runner:
+    build:
+      context: ../..
+      dockerfile: migration/testing/Dockerfile.test
+    environment:
+      - DATABASE_URL=postgresql://test_user:test_password@postgres-test:5432/test_licitacoes
+      - TEST_DATABASE_URL=postgresql://test_user:test_password@postgres-test:5432/test_licitacoes
+      - REDIS_URL=redis://redis-test:6379/0
+      - TESTING=1
+      - LOG_LEVEL=INFO
+      - TZ=America/Sao_Paulo
+      - PYTHONPATH=/app
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    volumes:
+      - ../..:/app:ro
+      - test_reports:/app/test_reports
+    networks:
+      - test_network
+    working_dir: /app/migration/testing
+    command: python run_tests.py --all --coverage --verbose
+    profiles:
+      - test
+
+  # Load testing service (optional)
+  load-test:
+    build:
+      context: ../..
+      dockerfile: migration/testing/Dockerfile.test
+    environment:
+      - DATABASE_URL=postgresql://test_user:test_password@postgres-test:5432/test_licitacoes
+      - TESTING=1
+      - PYTHONPATH=/app
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+    volumes:
+      - ../..:/app:ro
+    networks:
+      - test_network
+    working_dir: /app/migration/testing
+    command: python run_tests.py --performance --slow
+    profiles:
+      - load-test
+
+volumes:
+  postgres_test_data:
+    driver: local
+  redis_test_data:
+    driver: local
+  test_reports:
+    driver: local
+
+networks:
+  test_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -1,0 +1,20 @@
+{
+  "success": false,
+  "connectionString": "",
+  "errors": [
+    "Invalid Neon connection string format"
+  ],
+  "configFiles": [],
+  "config": {
+    "projectName": "licitafacil-ai",
+    "databaseName": "licitafacil_production",
+    "region": "us-east-2",
+    "connectionString": "[REDACTED]",
+    "branchName": "main",
+    "computeSettings": {
+      "minCu": 0.25,
+      "maxCu": 2,
+      "suspendTimeoutSeconds": 300
+    }
+  }
+}

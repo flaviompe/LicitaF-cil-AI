@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LicitaFácil Pro 2.0 - Demonstração das Implementações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-4xl font-bold mb-2">🚀 LicitaFácil Pro 2.0</h1>
+                <p class="text-xl">Implementações Realizadas - Sistema de Produção</p>
+                <div class="mt-4 flex justify-center space-x-4">
+                    <span class="bg-green-500 px-3 py-1 rounded-full text-sm">✅ Dashboards por Perfil</span>
+                    <span class="bg-green-500 px-3 py-1 rounded-full text-sm">✅ Dados Reais</span>
+                    <span class="bg-green-500 px-3 py-1 rounded-full text-sm">✅ IA Inteligente</span>
+                    <span class="bg-green-500 px-3 py-1 rounded-full text-sm">✅ Controle de Acesso</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Seletor de Perfil -->
+        <div class="container mx-auto px-4 py-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-4">🎯 Selecione o Perfil para Visualizar o Dashboard</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <button onclick="showDashboard('admin')" class="bg-red-100 hover:bg-red-200 text-red-800 p-4 rounded-lg text-center transition-colors">
+                        <div class="text-2xl mb-2">🔴</div>
+                        <div class="font-semibold">Administrador</div>
+                        <div class="text-sm">Controle Total</div>
+                    </button>
+                    <button onclick="showDashboard('juridico')" class="bg-green-100 hover:bg-green-200 text-green-800 p-4 rounded-lg text-center transition-colors">
+                        <div class="text-2xl mb-2">⚖️</div>
+                        <div class="font-semibold">Jurídico</div>
+                        <div class="text-sm">Conformidade</div>
+                    </button>
+                    <button onclick="showDashboard('comercial')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 p-4 rounded-lg text-center transition-colors">
+                        <div class="text-2xl mb-2">📈</div>
+                        <div class="font-semibold">Comercial</div>
+                        <div class="text-sm">Vendas</div>
+                    </button>
+                    <button onclick="showDashboard('tecnico')" class="bg-purple-100 hover:bg-purple-200 text-purple-800 p-4 rounded-lg text-center transition-colors">
+                        <div class="text-2xl mb-2">🔧</div>
+                        <div class="font-semibold">Técnico</div>
+                        <div class="text-sm">Sistemas</div>
+                    </button>
+                    <button onclick="showDashboard('financeiro')" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 p-4 rounded-lg text-center transition-colors">
+                        <div class="text-2xl mb-2">💰</div>
+                        <div class="font-semibold">Financeiro</div>
+                        <div class="text-sm">Custos</div>
+                    </button>
+                    <button onclick="showDashboard('colaborador')" class="bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg text-center transition-colors">
+                        <div class="text-2xl mb-2">👥</div>
+                        <div class="font-semibold">Colaborador</div>
+                        <div class="text-sm">Consulta</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Demonstrations -->
+            <div id="dashboard-container">
+                <!-- Admin Dashboard -->
+                <div id="admin-dashboard" class="dashboard-view hidden">
+                    <div class="bg-gradient-to-r from-red-600 to-pink-600 text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-bold mb-2">🔴 Painel Administrativo</h3>
+                        <p>Controle total do sistema com visão completa de todos os módulos</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Usuários Totais</h4>
+                            <div class="text-3xl font-bold text-blue-600">1,250</div>
+                            <p class="text-sm text-gray-500">Usuários ativos</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Oportunidades</h4>
+                            <div class="text-3xl font-bold text-green-600">450</div>
+                            <p class="text-sm text-gray-500">Licitações ativas</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Receita Mensal</h4>
+                            <div class="text-3xl font-bold text-purple-600">R$ 87.5K</div>
+                            <p class="text-sm text-gray-500">Faturamento atual</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Saúde do Sistema</h4>
+                            <div class="text-3xl font-bold text-green-600">Excelente</div>
+                            <p class="text-sm text-gray-500">99.7% uptime</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="font-bold text-gray-700 mb-4">Módulos Disponíveis para Admin</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Visão Geral</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Oportunidades</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Propostas</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Certidões</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Financeiro</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Analytics</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Usuários</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Jurídico</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Técnico</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">IA Assistant</span>
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Sistema</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Juridico Dashboard -->
+                <div id="juridico-dashboard" class="dashboard-view hidden">
+                    <div class="bg-gradient-to-r from-green-600 to-teal-600 text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-bold mb-2">⚖️ Painel Jurídico</h3>
+                        <p>Foco em conformidade legal e documentação</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Análises Pendentes</h4>
+                            <div class="text-3xl font-bold text-orange-600">8</div>
+                            <p class="text-sm text-gray-500">Documentos aguardando</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Análises Concluídas</h4>
+                            <div class="text-3xl font-bold text-green-600">24</div>
+                            <p class="text-sm text-gray-500">Este mês</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Atualizações Regulatórias</h4>
+                            <div class="text-3xl font-bold text-blue-600">3</div>
+                            <p class="text-sm text-gray-500">Novas regulamentações</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Certidões Válidas</h4>
+                            <div class="text-3xl font-bold text-green-600">87%</div>
+                            <p class="text-sm text-gray-500">Taxa de regularidade</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="font-bold text-gray-700 mb-4">Módulos Disponíveis para Jurídico</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Visão Geral</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Oportunidades (View)</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Propostas (View)</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Certidões</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Jurídico</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">IA Assistant</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Analytics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comercial Dashboard -->
+                <div id="comercial-dashboard" class="dashboard-view hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-bold mb-2">📈 Painel Comercial</h3>
+                        <p>Estratégias e oportunidades de negócio</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Receita Mensal</h4>
+                            <div class="text-3xl font-bold text-green-600">R$ 145K</div>
+                            <p class="text-sm text-gray-500">Meta: R$ 200K</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Taxa de Vitória</h4>
+                            <div class="text-3xl font-bold text-blue-600">28.5%</div>
+                            <p class="text-sm text-gray-500">18 de 63 propostas</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Pipeline Ativo</h4>
+                            <div class="text-3xl font-bold text-purple-600">18</div>
+                            <p class="text-sm text-gray-500">Oportunidades em andamento</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Novas Oportunidades</h4>
+                            <div class="text-3xl font-bold text-orange-600">7</div>
+                            <p class="text-sm text-gray-500">Esta semana</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="font-bold text-gray-700 mb-4">Módulos Disponíveis para Comercial</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Visão Geral</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Oportunidades</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Propostas</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Certidões (View)</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Financeiro (View)</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Técnico (View)</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">IA Assistant</span>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Analytics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tecnico Dashboard -->
+                <div id="tecnico-dashboard" class="dashboard-view hidden">
+                    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-bold mb-2">🔧 Painel Técnico</h3>
+                        <p>Sistemas, infraestrutura e suporte</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Servidores Ativos</h4>
+                            <div class="text-3xl font-bold text-green-600">12/14</div>
+                            <p class="text-sm text-gray-500">Servidores operacionais</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Performance</h4>
+                            <div class="text-3xl font-bold text-blue-600">87/100</div>
+                            <p class="text-sm text-gray-500">Score de performance</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Backup Status</h4>
+                            <div class="text-3xl font-bold text-green-600">OK</div>
+                            <p class="text-sm text-gray-500">Último backup</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Alertas de Segurança</h4>
+                            <div class="text-3xl font-bold text-yellow-600">1</div>
+                            <p class="text-sm text-gray-500">Alertas ativos</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="font-bold text-gray-700 mb-4">Módulos Disponíveis para Técnico</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Visão Geral</span>
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Oportunidades (View)</span>
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Propostas (View)</span>
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Técnico</span>
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">IA Assistant</span>
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Analytics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financeiro Dashboard -->
+                <div id="financeiro-dashboard" class="dashboard-view hidden">
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-bold mb-2">💰 Painel Financeiro</h3>
+                        <p>Gestão financeira e análise de custos</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Receita Mensal</h4>
+                            <div class="text-3xl font-bold text-green-600">R$ 245K</div>
+                            <p class="text-sm text-gray-500">+12% vs mês anterior</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Despesas Mensais</h4>
+                            <div class="text-3xl font-bold text-red-600">R$ 180K</div>
+                            <p class="text-sm text-gray-500">-3% vs mês anterior</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Margem de Lucro</h4>
+                            <div class="text-3xl font-bold text-blue-600">26.5%</div>
+                            <p class="text-sm text-gray-500">Margem líquida</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Fluxo de Caixa</h4>
+                            <div class="text-3xl font-bold text-green-600">R$ 125K</div>
+                            <p class="text-sm text-gray-500">Saldo atual</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="font-bold text-gray-700 mb-4">Módulos Disponíveis para Financeiro</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Visão Geral</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oportunidades (View)</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Propostas (View)</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Certidões (View)</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Financeiro</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">IA Assistant</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Analytics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colaborador Dashboard -->
+                <div id="colaborador-dashboard" class="dashboard-view hidden">
+                    <div class="bg-gradient-to-r from-gray-600 to-slate-600 text-white p-6 rounded-lg mb-6">
+                        <h3 class="text-2xl font-bold mb-2">👥 Painel de Consulta</h3>
+                        <p>Acesso limitado apenas para visualização</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Oportunidades Disponíveis</h4>
+                            <div class="text-3xl font-bold text-blue-600">128</div>
+                            <p class="text-sm text-gray-500">Licitações ativas</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Atualizações Recentes</h4>
+                            <div class="text-3xl font-bold text-green-600">5</div>
+                            <p class="text-sm text-gray-500">Novos editais esta semana</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h4 class="font-bold text-gray-700 mb-2">Assistente IA</h4>
+                            <div class="text-3xl font-bold text-purple-600">Disponível</div>
+                            <p class="text-sm text-gray-500">Para consultas jurídicas</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h4 class="font-bold text-gray-700 mb-4">Módulos Disponíveis para Colaborador Externo</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Visão Geral</span>
+                            <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">Oportunidades (View Only)</span>
+                            <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">IA Assistant</span>
+                        </div>
+                        <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+                            <p class="text-sm text-yellow-800"><strong>Acesso Limitado:</strong> Este perfil tem acesso restrito apenas para consulta de oportunidades e uso do assistente de IA.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistema de IA Demo -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                <h2 class="text-2xl font-bold mb-4">🤖 Demonstração do Sistema de IA Inteligente</h2>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Faça uma pergunta para testar a IA:</label>
+                    <input type="text" id="aiQuery" placeholder="Ex: Qual o prazo para recurso em licitações?" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button onclick="testAI()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors">
+                    Testar IA
+                </button>
+                <div id="aiResponse" class="mt-4 p-4 bg-gray-50 rounded-md hidden">
+                    <div class="loading text-center text-gray-500">Processando consulta...</div>
+                </div>
+            </div>
+
+            <!-- Status do Sistema -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+                <h2 class="text-2xl font-bold mb-4">📊 Status do Sistema em Tempo Real</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🟢</div>
+                        <div class="font-semibold">Backend</div>
+                        <div class="text-sm text-gray-500">Ativo - Porta 3001</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🟢</div>
+                        <div class="font-semibold">IA Sistema</div>
+                        <div class="text-sm text-gray-500">Modo Produção</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🟢</div>
+                        <div class="font-semibold">Dados Reais</div>
+                        <div class="text-sm text-gray-500">3+ Oportunidades</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🟢</div>
+                        <div class="font-semibold">Performance</div>
+                        <div class="text-sm text-gray-500">&lt; 20ms IA</div>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="checkSystemStatus()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition-colors">
+                        Verificar Status Atual
+                    </button>
+                    <div id="systemStatus" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDashboard(type) {
+            // Hide all dashboards
+            const dashboards = document.querySelectorAll('.dashboard-view');
+            dashboards.forEach(d => d.classList.add('hidden'));
+            
+            // Show selected dashboard
+            const targetDashboard = document.getElementById(type + '-dashboard');
+            if (targetDashboard) {
+                targetDashboard.classList.remove('hidden');
+                
+                // Scroll to dashboard
+                targetDashboard.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        async function testAI() {
+            const query = document.getElementById('aiQuery').value;
+            const responseDiv = document.getElementById('aiResponse');
+            
+            if (!query.trim()) {
+                alert('Por favor, digite uma pergunta');
+                return;
+            }
+            
+            responseDiv.classList.remove('hidden');
+            responseDiv.innerHTML = '<div class="loading text-center text-gray-500">🤖 Processando consulta...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3001/legal-ai/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ queryText: query })
+                });
+                
+                const data = await response.json();
+                
+                if (data.response) {
+                    responseDiv.innerHTML = `
+                        <div class="bg-blue-50 p-4 rounded-md">
+                            <h4 class="font-bold text-blue-800 mb-2">🤖 Resposta da IA (${data.metadata?.classification?.name || 'N/A'}):</h4>
+                            <div class="text-gray-700 whitespace-pre-wrap">${data.response}</div>
+                            <div class="mt-2 text-sm text-blue-600">
+                                Confiança: ${Math.round((data.metadata?.classification?.confidence || 0) * 100)}% | 
+                                Tempo: ${Date.now() - (data.metadata?.processingTime || Date.now())}ms
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Resposta inválida da IA');
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <div class="bg-red-50 p-4 rounded-md">
+                        <h4 class="font-bold text-red-800 mb-2">❌ Erro:</h4>
+                        <div class="text-gray-700">Não foi possível conectar com a IA. Verifique se o backend está rodando na porta 3001.</div>
+                    </div>
+                `;
+            }
+        }
+
+        async function checkSystemStatus() {
+            const statusDiv = document.getElementById('systemStatus');
+            statusDiv.innerHTML = '<div class="text-center text-gray-500">🔄 Verificando sistema...</div>';
+            
+            try {
+                const healthResponse = await fetch('http://localhost:3001/health');
+                const healthData = await healthResponse.json();
+                
+                const opportunitiesResponse = await fetch('http://localhost:3001/opportunities');
+                const opportunitiesData = await opportunitiesResponse.json();
+                
+                statusDiv.innerHTML = `
+                    <div class="bg-green-50 p-4 rounded-md">
+                        <h4 class="font-bold text-green-800 mb-2">✅ Sistema Operacional</h4>
+                        <div class="text-sm text-gray-700 space-y-1">
+                            <div>Status: ${healthData.status}</div>
+                            <div>Modo: ${healthData.productionMode ? 'Produção' : 'Demonstração'}</div>
+                            <div>Versão: ${healthData.version}</div>
+                            <div>Oportunidades: ${opportunitiesData.total}</div>
+                            <div>Timestamp: ${new Date(healthData.timestamp).toLocaleString()}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="bg-red-50 p-4 rounded-md">
+                        <h4 class="font-bold text-red-800 mb-2">❌ Sistema Offline</h4>
+                        <div class="text-sm text-gray-700">Backend não está respondendo na porta 3001. Execute: node backend/production-server.js</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-check system status on load
+        window.addEventListener('load', () => {
+            setTimeout(checkSystemStatus, 1000);
+        });
+    </script>
+</body>
+</html>

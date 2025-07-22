@@ -1,0 +1,2710 @@
+{
+  "currentSchema": {
+    "tables": [
+      {
+        "name": "Account",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "type",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "provider",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "providerAccountId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "refresh_token",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "access_token",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "expires_at",
+            "type": "Int",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "token_type",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "scope",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "id_token",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "session_state",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "type",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "provider",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "providerAccountId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "refresh_token",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "access_token",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "expires_at",
+            "type": "Int",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "token_type",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "scope",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "id_token",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "session_state",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          }
+        ]
+      },
+      {
+        "name": "Session",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "sessionToken",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "expires",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "sessionToken",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "expires",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          }
+        ]
+      },
+      {
+        "name": "User",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "email",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "emailVerified",
+            "type": "DateTime",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "image",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "password",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "role",
+            "type": "Role",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(USER)"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "accounts",
+            "type": "Account",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "sessions",
+            "type": "Session",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "proposals",
+            "type": "Proposal",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "certificates",
+            "type": "Certificate",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "notifications",
+            "type": "Notification",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "email",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "emailVerified",
+            "type": "DateTime",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "image",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "password",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "role",
+            "type": "Role",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(USER)"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "accounts",
+            "type": "Account",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "sessions",
+            "type": "Session",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "proposals",
+            "type": "Proposal",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "certificates",
+            "type": "Certificate",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "notifications",
+            "type": "Notification",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ]
+      },
+      {
+        "name": "Company",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "cnpj",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "fantasyName",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "email",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "phone",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "address",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "city",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "state",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "zipCode",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "businessType",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "isActive",
+            "type": "Boolean",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(true)"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "opportunities",
+            "type": "Opportunity",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "proposals",
+            "type": "Proposal",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "certificates",
+            "type": "Certificate",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "cnpj",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "name",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "fantasyName",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "email",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "phone",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "address",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "city",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "state",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "zipCode",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "businessType",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "isActive",
+            "type": "Boolean",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(true)"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "opportunities",
+            "type": "Opportunity",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "proposals",
+            "type": "Proposal",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "certificates",
+            "type": "Certificate",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ]
+      },
+      {
+        "name": "Opportunity",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "title",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "description",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "editalNumber",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "organ",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "publishDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "openingDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "closingDate",
+            "type": "DateTime",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "bidType",
+            "type": "BidType",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "status",
+            "type": "OpportunityStatus",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(OPEN)"
+          },
+          {
+            "name": "editalLink",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "estimatedValue",
+            "type": "Float",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "companyId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [companyId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "proposals",
+            "type": "Proposal",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "title",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "description",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "editalNumber",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "organ",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "publishDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "openingDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "closingDate",
+            "type": "DateTime",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "bidType",
+            "type": "BidType",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "status",
+            "type": "OpportunityStatus",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(OPEN)"
+          },
+          {
+            "name": "editalLink",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "estimatedValue",
+            "type": "Float",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "companyId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [companyId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "proposals",
+            "type": "Proposal",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ]
+      },
+      {
+        "name": "Proposal",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "proposalDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "proposedValue",
+            "type": "Float",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "status",
+            "type": "ProposalStatus",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(PENDING)"
+          },
+          {
+            "name": "result",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "observations",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "documents",
+            "type": "String",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "opportunityId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "opportunity",
+            "type": "Opportunity",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [opportunityId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "companyId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [companyId], references: [id], onDelete: Cascade)"
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "proposalDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "proposedValue",
+            "type": "Float",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "status",
+            "type": "ProposalStatus",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(PENDING)"
+          },
+          {
+            "name": "result",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "observations",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "documents",
+            "type": "String",
+            "isOptional": false,
+            "isArray": true,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "opportunityId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "opportunity",
+            "type": "Opportunity",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [opportunityId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "companyId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [companyId], references: [id], onDelete: Cascade)"
+          }
+        ]
+      },
+      {
+        "name": "Certificate",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "type",
+            "type": "CertificateType",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "issuer",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "issueDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "expiryDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "status",
+            "type": "CertificateStatus",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(VALID)"
+          },
+          {
+            "name": "documentUrl",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "observations",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "companyId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [companyId], references: [id], onDelete: Cascade)"
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "type",
+            "type": "CertificateType",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "issuer",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "issueDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "expiryDate",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "status",
+            "type": "CertificateStatus",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(VALID)"
+          },
+          {
+            "name": "documentUrl",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "observations",
+            "type": "String",
+            "isOptional": true,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          },
+          {
+            "name": "companyId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "company",
+            "type": "Company",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [companyId], references: [id], onDelete: Cascade)"
+          }
+        ]
+      },
+      {
+        "name": "Notification",
+        "fields": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "title",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "message",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "type",
+            "type": "NotificationType",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "isRead",
+            "type": "Boolean",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(false)"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          }
+        ],
+        "relations": [
+          {
+            "name": "id",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@id @default(cuid())"
+          },
+          {
+            "name": "title",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "message",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@db.Text"
+          },
+          {
+            "name": "type",
+            "type": "NotificationType",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "isRead",
+            "type": "Boolean",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(false)"
+          },
+          {
+            "name": "createdAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@default(now())"
+          },
+          {
+            "name": "updatedAt",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@updatedAt"
+          },
+          {
+            "name": "userId",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "user",
+            "type": "User",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@relation(fields: [userId], references: [id], onDelete: Cascade)"
+          }
+        ]
+      },
+      {
+        "name": "VerificationToken",
+        "fields": [
+          {
+            "name": "identifier",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "token",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "expires",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ],
+        "relations": [
+          {
+            "name": "identifier",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          },
+          {
+            "name": "token",
+            "type": "String",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": "@unique"
+          },
+          {
+            "name": "expires",
+            "type": "DateTime",
+            "isOptional": false,
+            "isArray": false,
+            "isRelation": true,
+            "modifiers": ""
+          }
+        ]
+      }
+    ],
+    "indexes": [
+      {
+        "table": "Account",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "Session",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "Session",
+        "field": "sessionToken",
+        "type": "unique"
+      },
+      {
+        "table": "User",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "User",
+        "field": "email",
+        "type": "unique"
+      },
+      {
+        "table": "Company",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "Company",
+        "field": "cnpj",
+        "type": "unique"
+      },
+      {
+        "table": "Company",
+        "field": "userId",
+        "type": "unique"
+      },
+      {
+        "table": "Opportunity",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "Proposal",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "Certificate",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "Notification",
+        "field": "id",
+        "type": "primary_key"
+      },
+      {
+        "table": "VerificationToken",
+        "field": "token",
+        "type": "unique"
+      }
+    ],
+    "constraints": [
+      {
+        "table": "Account",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "userId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "type",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "provider",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "providerAccountId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "refresh_token",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "access_token",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "expires_at",
+        "type": "foreign_key",
+        "references": "Int"
+      },
+      {
+        "table": "Account",
+        "field": "token_type",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "scope",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "id_token",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "session_state",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Account",
+        "field": "user",
+        "type": "foreign_key",
+        "references": "User"
+      },
+      {
+        "table": "Session",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Session",
+        "field": "sessionToken",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Session",
+        "field": "userId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Session",
+        "field": "expires",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Session",
+        "field": "user",
+        "type": "foreign_key",
+        "references": "User"
+      },
+      {
+        "table": "User",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "User",
+        "field": "name",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "User",
+        "field": "email",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "User",
+        "field": "emailVerified",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "User",
+        "field": "image",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "User",
+        "field": "password",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "User",
+        "field": "role",
+        "type": "foreign_key",
+        "references": "Role"
+      },
+      {
+        "table": "User",
+        "field": "createdAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "User",
+        "field": "updatedAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "User",
+        "field": "accounts",
+        "type": "foreign_key",
+        "references": "Account"
+      },
+      {
+        "table": "User",
+        "field": "sessions",
+        "type": "foreign_key",
+        "references": "Session"
+      },
+      {
+        "table": "User",
+        "field": "company",
+        "type": "foreign_key",
+        "references": "Company"
+      },
+      {
+        "table": "User",
+        "field": "proposals",
+        "type": "foreign_key",
+        "references": "Proposal"
+      },
+      {
+        "table": "User",
+        "field": "certificates",
+        "type": "foreign_key",
+        "references": "Certificate"
+      },
+      {
+        "table": "User",
+        "field": "notifications",
+        "type": "foreign_key",
+        "references": "Notification"
+      },
+      {
+        "table": "Company",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "cnpj",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "name",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "fantasyName",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "email",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "phone",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "address",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "city",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "state",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "zipCode",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "businessType",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "isActive",
+        "type": "foreign_key",
+        "references": "Boolean"
+      },
+      {
+        "table": "Company",
+        "field": "createdAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Company",
+        "field": "updatedAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Company",
+        "field": "userId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Company",
+        "field": "user",
+        "type": "foreign_key",
+        "references": "User"
+      },
+      {
+        "table": "Company",
+        "field": "opportunities",
+        "type": "foreign_key",
+        "references": "Opportunity"
+      },
+      {
+        "table": "Company",
+        "field": "proposals",
+        "type": "foreign_key",
+        "references": "Proposal"
+      },
+      {
+        "table": "Company",
+        "field": "certificates",
+        "type": "foreign_key",
+        "references": "Certificate"
+      },
+      {
+        "table": "Opportunity",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "title",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "description",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "editalNumber",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "organ",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "publishDate",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Opportunity",
+        "field": "openingDate",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Opportunity",
+        "field": "closingDate",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Opportunity",
+        "field": "bidType",
+        "type": "foreign_key",
+        "references": "BidType"
+      },
+      {
+        "table": "Opportunity",
+        "field": "status",
+        "type": "foreign_key",
+        "references": "OpportunityStatus"
+      },
+      {
+        "table": "Opportunity",
+        "field": "editalLink",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "estimatedValue",
+        "type": "foreign_key",
+        "references": "Float"
+      },
+      {
+        "table": "Opportunity",
+        "field": "createdAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Opportunity",
+        "field": "updatedAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Opportunity",
+        "field": "companyId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Opportunity",
+        "field": "company",
+        "type": "foreign_key",
+        "references": "Company"
+      },
+      {
+        "table": "Opportunity",
+        "field": "proposals",
+        "type": "foreign_key",
+        "references": "Proposal"
+      },
+      {
+        "table": "Proposal",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "proposalDate",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Proposal",
+        "field": "proposedValue",
+        "type": "foreign_key",
+        "references": "Float"
+      },
+      {
+        "table": "Proposal",
+        "field": "status",
+        "type": "foreign_key",
+        "references": "ProposalStatus"
+      },
+      {
+        "table": "Proposal",
+        "field": "result",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "observations",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "documents",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "createdAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Proposal",
+        "field": "updatedAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Proposal",
+        "field": "opportunityId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "opportunity",
+        "type": "foreign_key",
+        "references": "Opportunity"
+      },
+      {
+        "table": "Proposal",
+        "field": "userId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "user",
+        "type": "foreign_key",
+        "references": "User"
+      },
+      {
+        "table": "Proposal",
+        "field": "companyId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Proposal",
+        "field": "company",
+        "type": "foreign_key",
+        "references": "Company"
+      },
+      {
+        "table": "Certificate",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Certificate",
+        "field": "type",
+        "type": "foreign_key",
+        "references": "CertificateType"
+      },
+      {
+        "table": "Certificate",
+        "field": "issuer",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Certificate",
+        "field": "issueDate",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Certificate",
+        "field": "expiryDate",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Certificate",
+        "field": "status",
+        "type": "foreign_key",
+        "references": "CertificateStatus"
+      },
+      {
+        "table": "Certificate",
+        "field": "documentUrl",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Certificate",
+        "field": "observations",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Certificate",
+        "field": "createdAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Certificate",
+        "field": "updatedAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Certificate",
+        "field": "userId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Certificate",
+        "field": "user",
+        "type": "foreign_key",
+        "references": "User"
+      },
+      {
+        "table": "Certificate",
+        "field": "companyId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Certificate",
+        "field": "company",
+        "type": "foreign_key",
+        "references": "Company"
+      },
+      {
+        "table": "Notification",
+        "field": "id",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Notification",
+        "field": "title",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Notification",
+        "field": "message",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Notification",
+        "field": "type",
+        "type": "foreign_key",
+        "references": "NotificationType"
+      },
+      {
+        "table": "Notification",
+        "field": "isRead",
+        "type": "foreign_key",
+        "references": "Boolean"
+      },
+      {
+        "table": "Notification",
+        "field": "createdAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Notification",
+        "field": "updatedAt",
+        "type": "foreign_key",
+        "references": "DateTime"
+      },
+      {
+        "table": "Notification",
+        "field": "userId",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "Notification",
+        "field": "user",
+        "type": "foreign_key",
+        "references": "User"
+      },
+      {
+        "table": "VerificationToken",
+        "field": "identifier",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "VerificationToken",
+        "field": "token",
+        "type": "foreign_key",
+        "references": "String"
+      },
+      {
+        "table": "VerificationToken",
+        "field": "expires",
+        "type": "foreign_key",
+        "references": "DateTime"
+      }
+    ],
+    "dataTypes": [],
+    "enums": [
+      {
+        "name": "Role",
+        "values": [
+          "USER",
+          "ADMIN",
+          "JURIDICO",
+          "COMERCIAL",
+          "TECNICO",
+          "FINANCEIRO",
+          "COLABORADOR_EXTERNO"
+        ]
+      },
+      {
+        "name": "BidType",
+        "values": [
+          "PREGAO_ELETRONICO",
+          "PREGAO_PRESENCIAL",
+          "CONCORRENCIA",
+          "TOMADA_PRECOS",
+          "CONVITE",
+          "DISPENSA",
+          "INEXIGIBILIDADE"
+        ]
+      },
+      {
+        "name": "OpportunityStatus",
+        "values": [
+          "OPEN",
+          "CLOSED",
+          "CANCELLED",
+          "SUSPENDED"
+        ]
+      },
+      {
+        "name": "ProposalStatus",
+        "values": [
+          "PENDING",
+          "SUBMITTED",
+          "ACCEPTED",
+          "REJECTED",
+          "CANCELLED"
+        ]
+      },
+      {
+        "name": "CertificateType",
+        "values": [
+          "RECEITA_FEDERAL",
+          "FGTS",
+          "INSS",
+          "TRABALHISTA",
+          "ESTADUAL",
+          "MUNICIPAL",
+          "ANVISA",
+          "CREA",
+          "OTHER"
+        ]
+      },
+      {
+        "name": "CertificateStatus",
+        "values": [
+          "VALID",
+          "EXPIRED",
+          "EXPIRING_SOON",
+          "INVALID"
+        ]
+      },
+      {
+        "name": "NotificationType",
+        "values": [
+          "OPPORTUNITY",
+          "CERTIFICATE_EXPIRY",
+          "PROPOSAL_UPDATE",
+          "SYSTEM"
+        ]
+      }
+    ],
+    "currentProvider": "prisma-client-js"
+  },
+  "dataVolume": {
+    "totalRecords": 0,
+    "tableRecords": {
+      "user": 0,
+      "company": 0,
+      "opportunity": 0,
+      "proposal": 0,
+      "certificate": 0,
+      "notification": 0,
+      "account": 0,
+      "session": 0
+    }
+  },
+  "compatibility": {
+    "dataTypeMapping": {
+      "String": "VARCHAR/TEXT",
+      "Int": "INTEGER",
+      "Float": "REAL/DOUBLE PRECISION",
+      "Boolean": "BOOLEAN",
+      "DateTime": "TIMESTAMP WITH TIME ZONE",
+      "Decimal": "NUMERIC/DECIMAL",
+      "Json": "JSONB",
+      "Bytes": "BYTEA"
+    },
+    "potentialIssues": [
+      "Using @db.Text directive - needs verification in Neon",
+      "Composite unique constraints - verify compatibility"
+    ],
+    "migrationComplexity": "LOW"
+  },
+  "performance": {
+    "queryPatterns": [
+      "User authentication queries (by email)",
+      "Company lookup queries (by CNPJ)",
+      "Opportunity filtering (by status, dates)",
+      "Certificate expiry checks",
+      "Notification queries (by user, unread)",
+      "Proposal status updates"
+    ],
+    "indexUsage": [
+      {
+        "table": "User",
+        "field": "email",
+        "type": "unique"
+      },
+      {
+        "table": "Company",
+        "field": "cnpj",
+        "type": "unique"
+      },
+      {
+        "table": "Company",
+        "field": "userId",
+        "type": "unique"
+      },
+      {
+        "table": "Opportunity",
+        "field": "companyId",
+        "type": "foreign_key"
+      },
+      {
+        "table": "Certificate",
+        "field": "expiryDate",
+        "type": "date_range"
+      }
+    ],
+    "bottlenecks": [
+      "Opportunity search without proper indexing",
+      "Certificate expiry date queries",
+      "User session lookups",
+      "Notification count queries"
+    ]
+  }
+}

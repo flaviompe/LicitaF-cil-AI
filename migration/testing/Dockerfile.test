@@ -1,0 +1,55 @@
+# Dockerfile for migration testing environment
+FROM python:3.11-slim-bullseye
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    POETRY_VENV_IN_PROJECT=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    libpq-dev \
+    postgresql-client \
+    curl \
+    wget \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy requirements files
+COPY migration/testing/requirements-test.txt ./requirements-test.txt
+COPY requirements.txt ./requirements.txt 2>/dev/null || echo "# No main requirements.txt found" > ./requirements.txt
+
+# Install Python dependencies
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install -r requirements-test.txt && \
+    if [ -s requirements.txt ]; then pip install -r requirements.txt; fi
+
+# Install additional testing tools
+RUN pip install \
+    pytest-html \
+    pytest-json-report \
+    pytest-benchmark \
+    pytest-profiling
+
+# Copy application code
+COPY . .
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Create test reports directory
+RUN mkdir -p /app/test_reports
+
+# Default working directory for tests
+WORKDIR /app/migration/testing
+
+# Default command
+CMD ["python", "run_tests.py", "--help"]

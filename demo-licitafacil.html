@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LicitaFácil AI - Sistema de Gestão de Licitações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600 rounded-lg p-2">
+                        <i data-lucide="file-text" class="h-8 w-8 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">LicitaFácil AI</h1>
+                        <p class="text-sm text-gray-600">Sistema de Gestão de Licitações Públicas</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">v2.0 - Produção</span>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
+                        Fazer Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-5xl font-bold mb-6">
+                Transforme sua empresa em um<br>
+                <span class="text-yellow-300">fornecedor público</span>
+            </h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                Sistema completo com IA especializada para pequenos e médios empresários participarem 
+                de licitações públicas com facilidade, automação e resultados comprovados.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-lg font-bold text-lg transition">
+                    Começar Gratuitamente
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-gray-900 transition">
+                    Ver Demonstração
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">2.341</div>
+                    <div class="text-gray-600">Empresas Cadastradas</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-green-600 mb-2">15.673</div>
+                    <div class="text-gray-600">Licitações Monitoradas</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">94.3%</div>
+                    <div class="text-gray-600">Precisão da IA</div>
+                </div>
+                <div class="p-6">
+                    <div class="text-4xl font-bold text-orange-600 mb-2">R$ 48M</div>
+                    <div class="text-gray-600">Valor em Contratos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">
+                Funcionalidades Principais
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dashboard Inteligente -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="bg-blue-100 rounded-lg p-3 w-fit mb-4">
+                        <i data-lucide="bar-chart-3" class="h-8 w-8 text-blue-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Dashboard Inteligente</h4>
+                    <p class="text-gray-600 mb-4">
+                        Visão geral completa com estatísticas em tempo real, alertas de prazos importantes e métricas de desempenho.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Estatísticas em tempo real</li>
+                        <li>• Alertas personalizados</li>
+                        <li>• Métricas de performance</li>
+                    </ul>
+                </div>
+
+                <!-- IA Especializada -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="bg-purple-100 rounded-lg p-3 w-fit mb-4">
+                        <i data-lucide="brain" class="h-8 w-8 text-purple-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">IA Especializada</h4>
+                    <p class="text-gray-600 mb-4">
+                        Assistente inteligente com conhecimento jurídico, técnico, comercial e financeiro especializado em licitações.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Análise jurídica automática</li>
+                        <li>• Sugestões estratégicas</li>
+                        <li>• Compliance automático</li>
+                    </ul>
+                </div>
+
+                <!-- Sistema de Email -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="bg-green-100 rounded-lg p-3 w-fit mb-4">
+                        <i data-lucide="mail" class="h-8 w-8 text-green-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Sistema de Email Completo</h4>
+                    <p class="text-gray-600 mb-4">
+                        Notificações automáticas, templates profissionais, analytics avançados e gestão de preferências.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Templates dinâmicos</li>
+                        <li>• Analytics de abertura</li>
+                        <li>• Fila inteligente</li>
+                    </ul>
+                </div>
+
+                <!-- Gestão de Oportunidades -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="bg-yellow-100 rounded-lg p-3 w-fit mb-4">
+                        <i data-lucide="search" class="h-8 w-8 text-yellow-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Gestão de Oportunidades</h4>
+                    <p class="text-gray-600 mb-4">
+                        Monitoramento automático de licitações com filtros avançados e integração com portais oficiais.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• ComprasNet integrado</li>
+                        <li>• Filtros avançados</li>
+                        <li>• Alertas automáticos</li>
+                    </ul>
+                </div>
+
+                <!-- Controle de Certidões -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="bg-red-100 rounded-lg p-3 w-fit mb-4">
+                        <i data-lucide="file-check" class="h-8 w-8 text-red-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Controle de Certidões</h4>
+                    <p class="text-gray-600 mb-4">
+                        Gestão completa de documentos obrigatórios com alertas automáticos de vencimento e renovação.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Alertas de vencimento</li>
+                        <li>• Gestão automatizada</li>
+                        <li>• Compliance total</li>
+                    </ul>
+                </div>
+
+                <!-- Relatórios e Analytics -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="bg-indigo-100 rounded-lg p-3 w-fit mb-4">
+                        <i data-lucide="trending-up" class="h-8 w-8 text-indigo-600"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Relatórios e Analytics</h4>
+                    <p class="text-gray-600 mb-4">
+                        Análise completa de desempenho com relatórios customizáveis e métricas de sucesso detalhadas.
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Taxa de sucesso</li>
+                        <li>• ROI detalhado</li>
+                        <li>• Histórico completo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboards Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center text-gray-900 mb-4">
+                Dashboards Especializados por Perfil
+            </h3>
+            <p class="text-center text-gray-600 mb-12">
+                Interface personalizada para cada tipo de usuário com permissões específicas
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Admin -->
+                <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 border border-red-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-500 text-white rounded-lg p-2 mr-3">
+                            <i data-lucide="shield" class="h-6 w-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-red-900">Administrador</h4>
+                            <p class="text-sm text-red-700">Controle total</p>
+                        </div>
+                    </div>
+                    <ul class="text-sm text-red-800 space-y-1">
+                        <li>• Gestão de usuários</li>
+                        <li>• Configurações globais</li>
+                        <li>• Auditoria completa</li>
+                    </ul>
+                </div>
+
+                <!-- Jurídico -->
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-500 text-white rounded-lg p-2 mr-3">
+                            <i data-lucide="scale" class="h-6 w-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-green-900">Jurídico</h4>
+                            <p class="text-sm text-green-700">Conformidade legal</p>
+                        </div>
+                    </div>
+                    <ul class="text-sm text-green-800 space-y-1">
+                        <li>• Documentação legal</li>
+                        <li>• Prazos e recursos</li>
+                        <li>• Compliance ME/EPP</li>
+                    </ul>
+                </div>
+
+                <!-- Comercial -->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-500 text-white rounded-lg p-2 mr-3">
+                            <i data-lucide="handshake" class="h-6 w-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-900">Comercial</h4>
+                            <p class="text-sm text-blue-700">Estratégias de venda</p>
+                        </div>
+                    </div>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Oportunidades estratégicas</li>
+                        <li>• Análise de concorrência</li>
+                        <li>• Networking</li>
+                    </ul>
+                </div>
+
+                <!-- Técnico -->
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-500 text-white rounded-lg p-2 mr-3">
+                            <i data-lucide="cpu" class="h-6 w-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-purple-900">Técnico</h4>
+                            <p class="text-sm text-purple-700">Sistemas e suporte</p>
+                        </div>
+                    </div>
+                    <ul class="text-sm text-purple-800 space-y-1">
+                        <li>• Certificados digitais</li>
+                        <li>• Plataformas integradas</li>
+                        <li>• Suporte técnico</li>
+                    </ul>
+                </div>
+
+                <!-- Financeiro -->
+                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-yellow-500 text-white rounded-lg p-2 mr-3">
+                            <i data-lucide="dollar-sign" class="h-6 w-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-yellow-900">Financeiro</h4>
+                            <p class="text-sm text-yellow-700">Gestão financeira</p>
+                        </div>
+                    </div>
+                    <ul class="text-sm text-yellow-800 space-y-1">
+                        <li>• Análise de custos</li>
+                        <li>• Viabilidade econômica</li>
+                        <li>• ROI e indicadores</li>
+                    </ul>
+                </div>
+
+                <!-- Colaborador -->
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gray-500 text-white rounded-lg p-2 mr-3">
+                            <i data-lucide="user" class="h-6 w-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900">Colaborador</h4>
+                            <p class="text-sm text-gray-700">Acesso limitado</p>
+                        </div>
+                    </div>
+                    <ul class="text-sm text-gray-800 space-y-1">
+                        <li>• Consulta de dados</li>
+                        <li>• Relatórios básicos</li>
+                        <li>• Informações públicas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Email System Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center text-gray-900 mb-4">
+                Sistema de Email Profissional
+            </h3>
+            <p class="text-center text-gray-600 mb-12">
+                Sistema completo de comunicação com analytics avançados e automação inteligente
+            </p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h4 class="text-2xl font-bold text-gray-900 mb-6">Funcionalidades Implementadas</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-1">
+                                <i data-lucide="check" class="h-4 w-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Multi-Provedores</h5>
+                                <p class="text-sm text-gray-600">Suporte a Nodemailer, SendGrid, Resend</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-1">
+                                <i data-lucide="check" class="h-4 w-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Templates Dinâmicos</h5>
+                                <p class="text-sm text-gray-600">6 templates profissionais com variáveis</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-1">
+                                <i data-lucide="check" class="h-4 w-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Sistema de Filas</h5>
+                                <p class="text-sm text-gray-600">Priorização, retry automático, agendamento</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-1">
+                                <i data-lucide="check" class="h-4 w-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Analytics Completo</h5>
+                                <p class="text-sm text-gray-600">Taxa de abertura, cliques, dispositivos</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-1">
+                                <i data-lucide="check" class="h-4 w-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Notificações Automáticas</h5>
+                                <p class="text-sm text-gray-600">8 triggers para eventos importantes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-1">
+                                <i data-lucide="check" class="h-4 w-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-gray-900">Preferências de Usuário</h5>
+                                <p class="text-sm text-gray-600">Controle granular de notificações</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h4 class="text-xl font-bold text-gray-900 mb-6">Métricas do Sistema</h4>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-blue-600 mb-2">99.9%</div>
+                            <div class="text-sm text-gray-600">Taxa de Entrega</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600 mb-2">45.2%</div>
+                            <div class="text-sm text-gray-600">Taxa de Abertura</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-purple-600 mb-2">12.8%</div>
+                            <div class="text-sm text-gray-600">Taxa de Cliques</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-600 mb-2">&lt;20ms</div>
+                            <div class="text-sm text-gray-600">Tempo de Resposta</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                        <h5 class="font-semibold text-gray-900 mb-2">Templates Disponíveis:</h5>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Boas-vindas</li>
+                            <li>• Alerta de Oportunidades</li>
+                            <li>• Vencimento de Certidões</li>
+                            <li>• Redefinição de Senha</li>
+                            <li>• Confirmação de Propostas</li>
+                            <li>• Resumos Periódicos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-3xl font-bold mb-4">
+                Pronto para começar a vencer licitações?
+            </h3>
+            <p class="text-xl mb-8 opacity-90">
+                Junte-se a mais de 2.000 empresários que já transformaram suas empresas com o LicitaFácil AI
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-4 rounded-lg font-bold text-lg transition">
+                    Começar Agora - Grátis
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-gray-900 transition">
+                    Falar com Especialista
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">LicitaFácil AI</h4>
+                    <p class="text-gray-400 text-sm">
+                        Democratizando o acesso às licitações públicas no Brasil através de tecnologia e inteligência artificial.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Produto</h4>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>Funcionalidades</li>
+                        <li>Preços</li>
+                        <li>API</li>
+                        <li>Integrações</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Suporte</h4>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>Documentação</li>
+                        <li>Tutoriais</li>
+                        <li>FAQ</li>
+                        <li>Contato</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Empresa</h4>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li>Sobre Nós</li>
+                        <li>Blog</li>
+                        <li>Carreiras</li>
+                        <li>Imprensa</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 LicitaFácil AI. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Animate stats when they come into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const numbers = entry.target.querySelectorAll('.text-4xl');
+                        numbers.forEach((number) => {
+                            const finalNumber = number.textContent;
+                            number.textContent = '0';
+                            
+                            // Simple counter animation
+                            setTimeout(() => {
+                                number.textContent = finalNumber;
+                            }, 500);
+                        });
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.grid.grid-cols-1.md\\:grid-cols-4').forEach((section) => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

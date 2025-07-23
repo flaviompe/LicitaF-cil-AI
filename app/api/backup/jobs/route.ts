@@ -49,7 +49,7 @@ export async function GET(request: Request) {
     // })
 
     // Implementação temporária
-    const jobs = []
+    const jobs: any[] = []
 
     return NextResponse.json({ jobs })
 

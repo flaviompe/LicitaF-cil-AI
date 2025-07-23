@@ -57,7 +57,7 @@ export async function GET(request: Request) {
 }
 
 // GET /api/backup/jobs/[id] - Obter status específico do job
-export async function GET_JOB_STATUS(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions)
     

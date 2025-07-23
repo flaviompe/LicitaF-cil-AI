@@ -25,13 +25,15 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const sessionUser = session.user as any
+
     // Verificar se o usuário tem permissão para backups
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: {
         subscriptions: {
           include: { plan: true },
@@ -45,7 +47,7 @@ export async function GET(request: Request) {
     
     // Todos os planos têm acesso a backup básico
     const configs = await db.backupConfig.findMany({
-      where: { userId: session.user.id },
+      where: { userId: sessionUser.id },
       orderBy: { createdAt: 'desc' }
     })
 
@@ -65,16 +67,18 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const data = createConfigSchema.parse(body)
     
     // Verificar limites do plano
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: {
         subscriptions: {
           include: { plan: true },
@@ -96,7 +100,7 @@ export async function POST(request: Request) {
     
     // Verificar número de configurações
     const existingConfigs = await db.backupConfig.count({
-      where: { userId: session.user.id }
+      where: { userId: sessionUser.id }
     })
     
     if (existingConfigs >= currentLimits.maxConfigs) {
@@ -130,7 +134,7 @@ export async function POST(request: Request) {
     const config = await db.backupConfig.create({
       data: {
         ...data,
-        userId: session.user.id
+        userId: sessionUser.id
       }
     })
 
@@ -158,9 +162,11 @@ export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const { id, ...updateData } = body
@@ -176,7 +182,7 @@ export async function PUT(request: Request) {
     const existingConfig = await db.backupConfig.findFirst({
       where: {
         id,
-        userId: session.user.id
+        userId: sessionUser.id
       }
     })
     
@@ -209,9 +215,11 @@ export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const configId = url.searchParams.get('id')
@@ -227,7 +235,7 @@ export async function DELETE(request: Request) {
     const existingConfig = await db.backupConfig.findFirst({
       where: {
         id: configId,
-        userId: session.user.id
+        userId: sessionUser.id
       }
     })
     

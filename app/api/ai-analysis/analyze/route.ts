@@ -38,8 +38,8 @@ export async function POST(request: Request) {
 
     const currentPlan = 'Pro' // Temporariamente definir como Pro
 
-    // Verificar limite de uso
-    const monthlyUsage = await db.editalAnalysis.count({
+    // Verificar limite de uso (usando Proposal como proxy)
+    const monthlyUsage = await db.proposal.count({
       where: {
         opportunity: {
           company: {

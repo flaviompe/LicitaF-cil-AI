@@ -615,7 +615,8 @@ export class ChatService extends EventEmitter {
   }
 }
 
-  // Sistema de Fila Inteligente de Chat
+// Sistema de Fila Inteligente de Chat
+export class IntelligentChatQueue extends EventEmitter {
   private chatQueue: Map<string, { session: ChatSession; waitTime: number; priority: number }> = new Map()
   private botResponses: Map<string, { patterns: RegExp[]; responses: string[] }> = new Map()
 

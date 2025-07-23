@@ -1,4 +1,5 @@
 // Sistema de Controle de Acesso e Permissões
+import React from 'react';
 import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 import { rolePermissions, UserRole, hasPermission, canAccessModule } from './role-permissions'

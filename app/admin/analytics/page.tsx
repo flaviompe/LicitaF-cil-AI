@@ -16,12 +16,13 @@ import { BarChart3, Users, DollarSign, Target, TrendingUp } from 'lucide-react'
 export default async function AdminAnalyticsPage() {
   const session = await getServerSession(authOptions)
   
-  if (!session?.user?.id) {
+  if (!session?.user) {
     redirect('/login')
   }
 
   // Verificar se é admin (você pode implementar verificação de role)
-  const isAdmin = session.user.role === 'ADMIN'
+  const user = session.user as any
+  const isAdmin = user.role === 'ADMIN'
   
   if (!isAdmin) {
     redirect('/dashboard')

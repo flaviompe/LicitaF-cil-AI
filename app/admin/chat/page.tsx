@@ -22,12 +22,13 @@ import {
 export default async function AdminChatPage() {
   const session = await getServerSession(authOptions)
   
-  if (!session?.user?.id) {
+  if (!session?.user) {
     redirect('/login')
   }
 
+  const userSession = session.user as any
   const user = await db.user.findUnique({
-    where: { id: session.user.id }
+    where: { id: userSession.id }
   })
 
   if (!user || user.role !== 'ADMIN') {

@@ -10,11 +10,12 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const apiKeys = await apiService.getUserApiKeys(session.user.id)
+    const sessionUser = session.user as any
+    const apiKeys = await apiService.getUserApiKeys(sessionUser.id)
     
     // Remover a chave real por segurança
     const safeApiKeys = apiKeys.map(key => ({
@@ -38,16 +39,18 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const data = createApiKeySchema.parse(body)
     
     // Buscar usuário e empresa
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: { 
         company: true,
         subscriptions: {
@@ -68,7 +71,7 @@ export async function POST(request: Request) {
     const currentPlan = user.subscriptions[0]?.plan?.name || 'Starter'
     
     // Verificar limites do plano
-    const existingKeys = await apiService.getUserApiKeys(session.user.id)
+    const existingKeys = await apiService.getUserApiKeys(sessionUser.id)
     const planLimits = {
       'Starter': { maxKeys: 1, maxRequests: 100 },
       'Professional': { maxKeys: 5, maxRequests: 1000 },
@@ -94,7 +97,7 @@ export async function POST(request: Request) {
 
     // Criar chave API
     const apiKey = await apiService.createApiKey(
-      session.user.id,
+      sessionUser.id,
       user.company.id,
       data.name,
       data.permissions,
@@ -131,9 +134,11 @@ export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const keyId = url.searchParams.get('id')
@@ -145,7 +150,7 @@ export async function DELETE(request: Request) {
       )
     }
 
-    const success = await apiService.revokeApiKey(keyId, session.user.id)
+    const success = await apiService.revokeApiKey(keyId, sessionUser.id)
     
     if (!success) {
       return NextResponse.json(

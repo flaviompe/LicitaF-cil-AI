@@ -28,15 +28,7 @@ export async function POST(request: Request) {
     const user = await db.user.findUnique({
       where: { id: userId },
       include: {
-        subscriptions: {
-          include: {
-            plan: true,
-          },
-          take: 1,
-          orderBy: {
-            createdAt: 'desc'
-          }
-        }
+        company: true
       }
     })
 
@@ -44,7 +36,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
     }
 
-    const currentPlan = user.subscriptions[0]?.plan?.name || 'Starter'
+    const currentPlan = 'Pro' // Temporariamente definir como Pro
 
     // Verificar limite de uso
     const monthlyUsage = await db.editalAnalysis.count({

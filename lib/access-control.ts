@@ -142,11 +142,7 @@ export function ConditionalButton({
     return null
   }
 
-  return (
-    <button className={className} onClick={onClick}>
-      {children}
-    </button>
-  )
+  return React.createElement('button', { className, onClick }, children)
 }
 
 // Utilitário para filtrar dados baseado em permissões

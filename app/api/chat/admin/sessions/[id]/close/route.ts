@@ -19,9 +19,11 @@ export async function POST(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const chatId = params.id
     const body = await request.json()
@@ -29,7 +31,7 @@ export async function POST(
 
     // Verificar se o usuário é admin/agente
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
 
     if (!user || user.role !== 'ADMIN') {
@@ -52,7 +54,7 @@ export async function POST(
     const chat = (chatSession as any)[0]
 
     // Verificar se o agente tem permissão para fechar este chat
-    if (chat.agent_id && chat.agent_id !== session.user.id) {
+    if (chat.agent_id && chat.agent_id !== sessionUser.id) {
       return NextResponse.json(
         { error: 'Apenas o agente responsável pode fechar este chat' },
         { status: 403 }
@@ -88,7 +90,7 @@ export async function POST(
     // Notificar via WebSocket
     chatService.emit('chat_closed', {
       chatId,
-      closedBy: session.user.id,
+      closedBy: sessionUser.id,
       reason
     })
 

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { IntegrationDashboard } from '@/components/integrations/integration-dashboard'
 

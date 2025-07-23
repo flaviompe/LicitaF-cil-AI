@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { AIBiddingDashboard } from '@/components/ai-bidding/ai-bidding-dashboard'
 

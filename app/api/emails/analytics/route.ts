@@ -116,8 +116,9 @@ export async function GET(request: NextRequest) {
 
       case 'campaigns':
         // Campaign list with basic metrics
+        const sessionUser = session.user as any
         const campaigns = await analyticsService.getAllCampaigns({
-          createdBy: (session.user as any).role === 'ADMIN' ? undefined : session.user.id
+          createdBy: sessionUser.role === 'ADMIN' ? undefined : sessionUser.id
         })
         
         return NextResponse.json({
@@ -179,11 +180,12 @@ export async function POST(request: NextRequest) {
           )
         }
 
+        const sessionUser = session.user as any
         const campaignId = await analyticsService.createCampaign({
           name,
           description,
           templateId,
-          createdBy: session.user.id!,
+          createdBy: sessionUser.id,
           status: 'draft',
           recipientCount: 0,
           recipientFilter: recipientFilter || {},

@@ -24,9 +24,11 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const notificationService = getNotificationService()
     const templates = notificationService.getTemplates()
@@ -61,9 +63,11 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     
@@ -74,7 +78,7 @@ export async function POST(request: Request) {
       
       await notificationService.sendFromTemplate(
         templateId,
-        session.user.id,
+        sessionUser.id,
         variables,
         {
           ...options,
@@ -92,7 +96,7 @@ export async function POST(request: Request) {
       
       // Enviar notificação de teste
       await notificationService.sendNotification({
-        userId: session.user.id,
+        userId: sessionUser.id,
         type: 'system',
         title: 'Teste de Notificação',
         message: `Esta é uma notificação de teste via ${channel}. Se você recebeu esta mensagem, o canal está funcionando corretamente.`,
@@ -131,13 +135,15 @@ export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const sessionUser = session.user as any
+
     // Verificar se o usuário tem plano Enterprise
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: {
         subscriptions: {
           include: { plan: true },

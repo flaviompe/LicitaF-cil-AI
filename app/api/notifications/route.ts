@@ -46,9 +46,11 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const limit = parseInt(url.searchParams.get('limit') || '20')
@@ -58,7 +60,7 @@ export async function GET(request: Request) {
     const notificationService = getNotificationService()
     
     // Buscar notificações
-    const notifications = await notificationService.getUserNotifications(session.user.id, limit)
+    const notifications = await notificationService.getUserNotifications(sessionUser.id, limit)
     
     // Filtrar por tipo se especificado
     let filteredNotifications = notifications
@@ -72,7 +74,7 @@ export async function GET(request: Request) {
     }
     
     // Buscar contagem de não lidas
-    const unreadCount = await notificationService.getUnreadCount(session.user.id)
+    const unreadCount = await notificationService.getUnreadCount(sessionUser.id)
 
     return NextResponse.json({
       notifications: filteredNotifications,
@@ -94,9 +96,11 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     
@@ -106,7 +110,7 @@ export async function POST(request: Request) {
       const notificationService = getNotificationService()
       
       await notificationService.sendNotification({
-        userId: session.user.id,
+        userId: sessionUser.id,
         type,
         title,
         message,
@@ -125,7 +129,7 @@ export async function POST(request: Request) {
       const { notificationId } = markAsReadSchema.parse(body)
       
       const notificationService = getNotificationService()
-      await notificationService.markAsRead(notificationId, session.user.id)
+      await notificationService.markAsRead(notificationId, sessionUser.id)
 
       return NextResponse.json({ success: true })
     }
@@ -134,7 +138,7 @@ export async function POST(request: Request) {
       const settings = updateSettingsSchema.parse(body)
       
       const notificationService = getNotificationService()
-      await notificationService.updateUserSettings(session.user.id, settings)
+      await notificationService.updateUserSettings(sessionUser.id, settings)
 
       return NextResponse.json({ success: true })
     }
@@ -163,15 +167,17 @@ export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const settings = updateSettingsSchema.parse(body)
     
     const notificationService = getNotificationService()
-    await notificationService.updateUserSettings(session.user.id, settings)
+    await notificationService.updateUserSettings(sessionUser.id, settings)
 
     return NextResponse.json({ success: true })
 
@@ -197,9 +203,11 @@ export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const notificationId = url.searchParams.get('id')
@@ -215,7 +223,7 @@ export async function DELETE(request: Request) {
     await db.notification.delete({
       where: {
         id: notificationId,
-        userId: session.user.id
+        userId: sessionUser.id
       }
     })
 

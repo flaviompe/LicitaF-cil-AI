@@ -45,16 +45,18 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const data = onboardingSchema.parse(body)
 
     // Buscar usuário e empresa
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: { company: true }
     })
 
@@ -83,7 +85,7 @@ export async function POST(request: Request) {
 
       // Criar/atualizar perfil do usuário
       await prisma.user.update({
-        where: { id: session.user.id },
+        where: { id: sessionUser.id },
         data: {
           // Aqui podemos adicionar campos específicos do usuário se necessário
         }
@@ -92,7 +94,7 @@ export async function POST(request: Request) {
       // Salvar certificados se fornecidos
       if (data.documents?.certificates && data.documents.certificates.length > 0) {
         const certificates = data.documents.certificates.map(cert => ({
-          userId: session.user.id,
+          userId: sessionUser.id,
           companyId: user.company!.id,
           type: cert.type as any, // Validar com enum
           issuer: cert.issuer,
@@ -110,7 +112,7 @@ export async function POST(request: Request) {
       // Criar notificação de boas-vindas
       await prisma.notification.create({
         data: {
-          userId: session.user.id,
+          userId: sessionUser.id,
           title: 'Bem-vindo ao LicitaFácil Pro!',
           message: 'Sua conta foi configurada com sucesso. Agora você pode começar a participar de licitações públicas.',
           type: 'SYSTEM',

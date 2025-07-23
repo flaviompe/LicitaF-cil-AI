@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'

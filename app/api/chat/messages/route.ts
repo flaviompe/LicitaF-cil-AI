@@ -15,9 +15,11 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const chatId = url.searchParams.get('chatId')
@@ -29,13 +31,20 @@ export async function GET(request: Request) {
     }
 
     // Verificar se o chat pertence ao usuário - CORRIGIDO SQL INJECTION
-    const chatSession = await db.chatSession.findFirst({
-      where: {
-        id: chatId,
-        userId: session.user.id
-      },
-      select: { id: true }
-    })
+    // COMENTADO: chatSession não existe no schema Prisma
+    // const chatSession = await db.chatSession.findFirst({
+    //   where: {
+    //     id: chatId,
+    //     userId: sessionUser.id
+    //   },
+    //   select: { id: true }
+    // })
+
+    // Implementação temporária com raw SQL
+    const chatSession = await db.$queryRaw`
+      SELECT id FROM chat_sessions
+      WHERE id = ${chatId} AND user_id = ${sessionUser.id}
+    `
 
     if (!chatSession) {
       return NextResponse.json({ error: 'Chat não encontrado' }, { status: 404 })
@@ -83,17 +92,18 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const sessionUser = session.user as any
     const body = await request.json()
     const { chatId, content, type } = messageSchema.parse(body)
 
     // Verificar se o chat pertence ao usuário
     const chatSession = await db.$queryRaw`
       SELECT id, status FROM chat_sessions
-      WHERE id = ${chatId} AND user_id = ${session.user.id}
+      WHERE id = ${chatId} AND user_id = ${sessionUser.id}
     `
 
     if (!(chatSession as any).length) {
@@ -107,7 +117,7 @@ export async function POST(request: Request) {
 
     // Buscar dados do usuário
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
 
     if (!user) {
@@ -119,7 +129,7 @@ export async function POST(request: Request) {
     
     await db.$executeRaw`
       INSERT INTO chat_messages (id, chat_id, sender_id, sender_name, sender_role, content, type)
-      VALUES (${messageId}, ${chatId}, ${session.user.id}, ${user.name}, 'user', ${content}, ${type})
+      VALUES (${messageId}, ${chatId}, ${sessionUser.id}, ${user.name}, 'user', ${content}, ${type})
     `
 
     // Atualizar última atividade da sessão

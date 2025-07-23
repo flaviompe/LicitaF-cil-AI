@@ -12,15 +12,17 @@ export async function POST(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const chatId = params.id
 
     // Verificar se o usuário é admin/agente
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
 
     if (!user || user.role !== 'ADMIN') {
@@ -46,7 +48,7 @@ export async function POST(
     const agentActiveChats = await db.$queryRaw`
       SELECT COUNT(*) as count
       FROM chat_sessions
-      WHERE agent_id = ${session.user.id} AND status = 'active'
+      WHERE agent_id = ${sessionUser.id} AND status = 'active'
     `
 
     const activeCount = (agentActiveChats as any)[0]?.count || 0
@@ -63,7 +65,7 @@ export async function POST(
     await db.$executeRaw`
       UPDATE chat_sessions
       SET 
-        agent_id = ${session.user.id},
+        agent_id = ${sessionUser.id},
         agent_name = ${user.name},
         status = 'active',
         updated_at = CURRENT_TIMESTAMP
@@ -73,7 +75,7 @@ export async function POST(
     // Adicionar agente como participante
     await db.$executeRaw`
       INSERT INTO chat_participants (id, chat_id, user_id, role, name, email, online)
-      VALUES (${crypto.randomUUID()}, ${chatId}, ${session.user.id}, 'agent', ${user.name}, ${user.email}, true)
+      VALUES (${crypto.randomUUID()}, ${chatId}, ${sessionUser.id}, 'agent', ${user.name}, ${user.email}, true)
     `
 
     // Enviar mensagem do sistema
@@ -90,7 +92,7 @@ export async function POST(
     if (updatedSession) {
       chatService.emit('agent_joined', {
         chatId,
-        agent: { id: session.user.id, name: user.name },
+        agent: { id: sessionUser.id, name: user.name },
         session: updatedSession
       })
     }

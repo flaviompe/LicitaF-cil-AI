@@ -8,13 +8,15 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const sessionUser = session.user as any
+
     // Verificar se o usuário é admin/agente
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
 
     if (!user || user.role !== 'ADMIN') {
@@ -22,7 +24,7 @@ export async function GET(request: Request) {
     }
 
     const url = new URL(request.url)
-    const agentId = url.searchParams.get('agentId') || session.user.id
+    const agentId = url.searchParams.get('agentId') || sessionUser.id
     const period = url.searchParams.get('period') || '7d' // 1d, 7d, 30d, 90d
 
     // Calcular data de início baseado no período

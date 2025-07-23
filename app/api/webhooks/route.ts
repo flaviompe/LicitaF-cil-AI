@@ -10,11 +10,12 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const webhooks = await apiService.getUserWebhooks(session.user.id)
+    const sessionUser = session.user as any
+    const webhooks = await apiService.getUserWebhooks(sessionUser.id)
     
     // Remover secret por segurança
     const safeWebhooks = webhooks.map(webhook => ({
@@ -38,16 +39,18 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const data = createWebhookSchema.parse(body)
     
     // Buscar usuário e empresa
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: { 
         company: true,
         subscriptions: {
@@ -76,7 +79,7 @@ export async function POST(request: Request) {
     }
     
     // Verificar limites do plano
-    const existingWebhooks = await apiService.getUserWebhooks(session.user.id)
+    const existingWebhooks = await apiService.getUserWebhooks(sessionUser.id)
     const planLimits = {
       'Professional': { maxWebhooks: 3 },
       'Enterprise': { maxWebhooks: 20 }
@@ -120,7 +123,7 @@ export async function POST(request: Request) {
 
     // Criar webhook
     const webhook = await apiService.createWebhook(
-      session.user.id,
+      sessionUser.id,
       user.company.id,
       data.url,
       data.events
@@ -155,9 +158,11 @@ export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const { id, ...updateData } = body
@@ -173,7 +178,7 @@ export async function PUT(request: Request) {
     const existingWebhook = await db.webhook.findFirst({
       where: {
         id,
-        userId: session.user.id
+        userId: sessionUser.id
       }
     })
     
@@ -211,9 +216,11 @@ export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const webhookId = url.searchParams.get('id')
@@ -229,7 +236,7 @@ export async function DELETE(request: Request) {
     const existingWebhook = await db.webhook.findFirst({
       where: {
         id: webhookId,
-        userId: session.user.id
+        userId: sessionUser.id
       }
     })
     

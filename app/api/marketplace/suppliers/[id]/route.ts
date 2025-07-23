@@ -41,9 +41,11 @@ export async function PUT(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
     
     const supplierId = params.id
     const supplier = await marketplaceService.getSupplierById(supplierId)
@@ -57,10 +59,10 @@ export async function PUT(
     
     // Verificar se o usuário tem permissão para editar
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
     
-    if (supplier.userId !== session.user.id && user?.role !== 'ADMIN') {
+    if (supplier.userId !== sessionUser.id && user?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Sem permissão para editar este fornecedor' },
         { status: 403 }
@@ -94,9 +96,11 @@ export async function DELETE(
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
     
     const supplierId = params.id
     const supplier = await marketplaceService.getSupplierById(supplierId)
@@ -110,10 +114,10 @@ export async function DELETE(
     
     // Verificar se o usuário tem permissão para deletar
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
     
-    if (supplier.userId !== session.user.id && user?.role !== 'ADMIN') {
+    if (supplier.userId !== sessionUser.id && user?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'Sem permissão para deletar este fornecedor' },
         { status: 403 }

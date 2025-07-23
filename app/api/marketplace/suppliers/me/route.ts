@@ -8,11 +8,12 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
-    
-    const supplier = await marketplaceService.getSupplierByUserId(session.user.id)
+
+    const sessionUser = session.user as any
+    const supplier = await marketplaceService.getSupplierByUserId(sessionUser.id)
     
     if (!supplier) {
       return NextResponse.json(
@@ -36,11 +37,12 @@ export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
-    
-    const supplier = await marketplaceService.getSupplierByUserId(session.user.id)
+
+    const sessionUser = session.user as any
+    const supplier = await marketplaceService.getSupplierByUserId(sessionUser.id)
     
     if (!supplier) {
       return NextResponse.json(

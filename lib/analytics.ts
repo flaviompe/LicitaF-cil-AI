@@ -165,32 +165,38 @@ export class Analytics {
           }
         }),
         
-        // Pagamentos este mês
-        db.payment.aggregate({
-          where: {
-            createdAt: {
-              gte: monthStart
-            },
-            status: 'SUCCEEDED'
-          },
-          _sum: {
-            amount: true
-          }
-        }),
+        // COMENTADO: payment não existe no schema Prisma
+        // db.payment.aggregate({
+        //   where: {
+        //     createdAt: {
+        //       gte: monthStart
+        //     },
+        //     status: 'SUCCEEDED'
+        //   },
+        //   _sum: {
+        //     amount: true
+        //   }
+        // }),
         
-        // Pagamentos mês passado
-        db.payment.aggregate({
-          where: {
-            createdAt: {
-              gte: lastMonthStart,
-              lt: lastMonthEnd
-            },
-            status: 'SUCCEEDED'
-          },
-          _sum: {
-            amount: true
-          }
-        }),
+        // Implementação temporária
+        Promise.resolve({ _sum: { amount: 0 } }),
+        
+        // COMENTADO: payment não existe no schema Prisma
+        // db.payment.aggregate({
+        //   where: {
+        //     createdAt: {
+        //       gte: lastMonthStart,
+        //       lt: lastMonthEnd
+        //     },
+        //     status: 'SUCCEEDED'
+        //   },
+        //   _sum: {
+        //     amount: true
+        //   }
+        // })
+        
+        // Implementação temporária
+        Promise.resolve({ _sum: { amount: 0 } }),
       ])
 
       // Calcular taxa de sucesso
@@ -209,14 +215,18 @@ export class Analytics {
         ? ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100 
         : 0
 
-      const totalRevenue = await db.payment.aggregate({
-        where: {
-          status: 'SUCCEEDED'
-        },
-        _sum: {
-          amount: true
-        }
-      })
+      // COMENTADO: payment não existe no schema Prisma
+      // const totalRevenue = await db.payment.aggregate({
+      //   where: {
+      //     status: 'SUCCEEDED'
+      //   },
+      //   _sum: {
+      //     amount: true
+      //   }
+      // })
+      
+      // Implementação temporária
+      const totalRevenue = { _sum: { amount: 0 } }
 
       return {
         totalUsers,

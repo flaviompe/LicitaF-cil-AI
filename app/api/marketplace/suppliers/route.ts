@@ -161,15 +161,17 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
     
     const body = await request.json()
     const validatedData = supplierSchema.parse(body)
     
     // Verificar se o usuário já tem um fornecedor
-    const existingSupplier = await marketplaceService.getSupplierByUserId(session.user.id)
+    const existingSupplier = await marketplaceService.getSupplierByUserId(sessionUser.id)
     if (existingSupplier) {
       return NextResponse.json(
         { error: 'Usuário já possui um fornecedor cadastrado' },
@@ -189,7 +191,7 @@ export async function POST(request: Request) {
     // Criar fornecedor
     const supplier = await marketplaceService.createSupplier({
       ...validatedData,
-      userId: session.user.id,
+      userId: sessionUser.id,
       certifications: [],
       documents: validatedData.documents || [],
       status: 'pending',

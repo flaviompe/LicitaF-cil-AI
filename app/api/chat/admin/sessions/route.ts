@@ -8,13 +8,15 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
+    const sessionUser = session.user as any
+
     // Verificar se o usuário é admin/agente
     const user = await db.user.findUnique({
-      where: { id: session.user.id }
+      where: { id: sessionUser.id }
     })
 
     if (!user || user.role !== 'ADMIN') {

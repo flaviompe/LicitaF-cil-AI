@@ -9,9 +9,11 @@ export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const url = new URL(request.url)
     const status = url.searchParams.get('status')
@@ -20,7 +22,7 @@ export async function GET(request: Request) {
 
     // Construir filtros
     const where: any = {
-      user_id: session.user.id
+      user_id: sessionUser.id
     }
     
     if (status) {
@@ -35,7 +37,7 @@ export async function GET(request: Request) {
         MAX(m.timestamp) as last_message_time
       FROM chat_sessions s
       LEFT JOIN chat_messages m ON s.id = m.chat_id
-      WHERE s.user_id = ${session.user.id}
+      WHERE s.user_id = ${sessionUser.id}
       ${status ? `AND s.status = ${status}` : ''}
       GROUP BY s.id
       ORDER BY s.created_at DESC
@@ -46,7 +48,7 @@ export async function GET(request: Request) {
     const totalResult = await db.$queryRaw`
       SELECT COUNT(*) as total
       FROM chat_sessions
-      WHERE user_id = ${session.user.id}
+      WHERE user_id = ${sessionUser.id}
       ${status ? `AND status = ${status}` : ''}
     `
 
@@ -76,9 +78,11 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
+
+    const sessionUser = session.user as any
 
     const body = await request.json()
     const { subject, department, priority } = body
@@ -86,7 +90,7 @@ export async function POST(request: Request) {
     // Verificar se já existe uma sessão ativa
     const existingSession = await db.$queryRaw`
       SELECT id FROM chat_sessions
-      WHERE user_id = ${session.user.id} AND status IN ('waiting', 'active')
+      WHERE user_id = ${sessionUser.id} AND status IN ('waiting', 'active')
       LIMIT 1
     `
 
@@ -99,7 +103,7 @@ export async function POST(request: Request) {
 
     // Buscar dados do usuário
     const user = await db.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: sessionUser.id },
       include: { company: true }
     })
 
@@ -115,7 +119,7 @@ export async function POST(request: Request) {
     
     await db.$executeRaw`
       INSERT INTO chat_sessions (id, user_id, user_name, user_email, status, subject, department, priority)
-      VALUES (${sessionId}, ${session.user.id}, ${user.name}, ${user.email}, 'waiting', ${subject}, ${department}, ${priority})
+      VALUES (${sessionId}, ${sessionUser.id}, ${user.name}, ${user.email}, 'waiting', ${subject}, ${department}, ${priority})
     `
 
     // Buscar a sessão criada

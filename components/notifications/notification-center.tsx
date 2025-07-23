@@ -22,7 +22,7 @@ import {
   Clock,
   Filter,
   Search,
-  MarkAsRead,
+  CheckCircle as MarkAsRead,
   Trash2,
   Send,
   CheckCircle,

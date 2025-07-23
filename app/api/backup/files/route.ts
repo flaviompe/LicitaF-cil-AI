@@ -51,7 +51,7 @@ export async function GET(request: Request) {
 }
 
 // DELETE /api/backup/files/[id] - Deletar arquivo de backup
-export async function DELETE_FILE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions)
     

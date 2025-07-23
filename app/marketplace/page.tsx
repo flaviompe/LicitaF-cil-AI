@@ -19,7 +19,7 @@ import {
   Award,
   ShoppingCart,
   Target,
-  Handshake,
+  Users as Handshake,
   CheckCircle,
   Clock,
   DollarSign,

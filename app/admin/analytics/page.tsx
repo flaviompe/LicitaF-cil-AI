@@ -128,19 +128,19 @@ export default async function AdminAnalyticsPage() {
         </TabsContent>
 
         <TabsContent value="users" className="mt-6">
-          <UserMetrics metrics={metrics} />
+          <UserMetrics metrics={metrics as any} />
         </TabsContent>
 
         <TabsContent value="revenue" className="mt-6">
-          <RevenueMetrics metrics={metrics} />
+          <RevenueMetrics metrics={metrics as any} />
         </TabsContent>
 
         <TabsContent value="opportunities" className="mt-6">
-          <OpportunityMetrics metrics={metrics} />
+          <OpportunityMetrics metrics={metrics as any} />
         </TabsContent>
 
         <TabsContent value="proposals" className="mt-6">
-          <ProposalMetrics metrics={metrics} />
+          <ProposalMetrics metrics={metrics as any} />
         </TabsContent>
       </Tabs>
     </div>

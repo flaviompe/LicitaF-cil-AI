@@ -101,19 +101,19 @@ export function ProtectedRoute({
   requiredPermission, 
   requiredModule, 
   userRole = 'USER',
-  fallback = <div>Acesso negado</div>
+  fallback = React.createElement('div', null, 'Acesso negado')
 }: ProtectedRouteProps) {
   // Verificar permissão específica
   if (requiredPermission && !hasPermission(userRole, requiredPermission)) {
-    return <>{fallback}</>
+    return fallback
   }
 
   // Verificar acesso ao módulo
   if (requiredModule && !canAccessModule(userRole, requiredModule)) {
-    return <>{fallback}</>
+    return fallback
   }
 
-  return <>{children}</>
+  return children
 }
 
 // Componente de botão condicional baseado em permissão

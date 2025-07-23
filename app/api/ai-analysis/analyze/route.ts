@@ -94,26 +94,9 @@ export async function POST(request: Request) {
         analysisResult = await AIAnalysisService.analyzeEdital(editalText, tempOpportunity.id)
       }
 
-      // Salvar análise no banco
-      await db.editalAnalysis.create({
-        data: {
-          opportunityId: tempOpportunity.id,
-          summary: analysisResult.summary,
-          keyRequirements: analysisResult.keyRequirements,
-          eligibilityCriteria: analysisResult.eligibilityCriteria,
-          riskLevel: analysisResult.riskAssessment.level,
-          riskFactors: analysisResult.riskAssessment.factors,
-          estimatedCompetitors: analysisResult.competitiveAnalysis.estimatedCompetitors,
-          marketAdvantage: analysisResult.competitiveAnalysis.marketAdvantage,
-          challenges: analysisResult.competitiveAnalysis.challenges,
-          recommendations: analysisResult.recommendations,
-          estimatedSuccessRate: analysisResult.estimatedSuccessRate,
-          requiredDocuments: analysisResult.requiredDocuments,
-          timeline: analysisResult.timeline,
-          budgetAnalysis: analysisResult.budgetAnalysis,
-          confidence: analysisResult.confidence,
-        }
-      })
+      // Salvar análise no banco (temporariamente comentado - modelo não existe)
+      // await db.editalAnalysis.create({ ... })
+      console.log('Analysis completed for user:', userId, 'Type:', analysisType)
 
       return NextResponse.json({
         success: true,

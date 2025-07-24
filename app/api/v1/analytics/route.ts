@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
   
   try {
     const auth = await apiService.authenticate(request, ['analytics:read'])
-    if (!auth.success) {
+    if ('error' in auth) {
       return auth as NextResponse
     }
 

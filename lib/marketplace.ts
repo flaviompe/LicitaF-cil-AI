@@ -540,11 +540,11 @@ export class MarketplaceService extends EventEmitter {
         SELECT * FROM suppliers WHERE id = ${id}
       `
       
-      if (!(suppliers as any).length) {
+      if (!suppliers.length) {
         return null
       }
       
-      const supplierData = (suppliers as any)[0]
+      const supplierData = suppliers[0]
       
       // Buscar avaliações
       const reviews = await db.$queryRaw`
@@ -554,7 +554,7 @@ export class MarketplaceService extends EventEmitter {
       `
       
       // Calcular estatísticas de avaliação
-      const rating = this.calculateRating(reviews as any[])
+      const rating = this.calculateRating(reviews)
       
       return {
         id: supplierData.id,
@@ -572,7 +572,7 @@ export class MarketplaceService extends EventEmitter {
         portfolio: JSON.parse(supplierData.portfolio || '{}'),
         certifications: JSON.parse(supplierData.certifications || '[]'),
         documents: JSON.parse(supplierData.documents || '[]'),
-        reviews: (reviews as any[]).map(review => ({
+        reviews: reviews.map(review => ({
           id: review.id,
           supplierId: review.supplier_id,
           clientId: review.client_id,
@@ -612,11 +612,11 @@ export class MarketplaceService extends EventEmitter {
         SELECT * FROM suppliers WHERE user_id = ${userId}
       `
       
-      if (!(suppliers as any).length) {
+      if (!suppliers.length) {
         return null
       }
       
-      const supplierData = (suppliers as any)[0]
+      const supplierData = suppliers[0]
       
       // Buscar avaliações
       const reviews = await db.$queryRaw`
@@ -626,7 +626,7 @@ export class MarketplaceService extends EventEmitter {
       `
       
       // Calcular estatísticas de avaliação
-      const rating = this.calculateRating(reviews as any[])
+      const rating = this.calculateRating(reviews)
       
       return {
         id: supplierData.id,
@@ -644,7 +644,7 @@ export class MarketplaceService extends EventEmitter {
         portfolio: JSON.parse(supplierData.portfolio || '{}'),
         certifications: JSON.parse(supplierData.certifications || '[]'),
         documents: JSON.parse(supplierData.documents || '[]'),
-        reviews: (reviews as any[]).map(review => ({
+        reviews: reviews.map(review => ({
           id: review.id,
           supplierId: review.supplier_id,
           clientId: review.client_id,
@@ -684,11 +684,11 @@ export class MarketplaceService extends EventEmitter {
         SELECT * FROM suppliers WHERE cnpj = ${cnpj}
       `
       
-      if (!(suppliers as any).length) {
+      if (!suppliers.length) {
         return null
       }
       
-      const supplierData = (suppliers as any)[0]
+      const supplierData = suppliers[0]
       
       // Buscar avaliações
       const reviews = await db.$queryRaw`
@@ -698,7 +698,7 @@ export class MarketplaceService extends EventEmitter {
       `
       
       // Calcular estatísticas de avaliação
-      const rating = this.calculateRating(reviews as any[])
+      const rating = this.calculateRating(reviews)
       
       return {
         id: supplierData.id,
@@ -716,7 +716,7 @@ export class MarketplaceService extends EventEmitter {
         portfolio: JSON.parse(supplierData.portfolio || '{}'),
         certifications: JSON.parse(supplierData.certifications || '[]'),
         documents: JSON.parse(supplierData.documents || '[]'),
-        reviews: (reviews as any[]).map(review => ({
+        reviews: reviews.map(review => ({
           id: review.id,
           supplierId: review.supplier_id,
           clientId: review.client_id,
@@ -786,11 +786,11 @@ export class MarketplaceService extends EventEmitter {
         SELECT * FROM service_requests WHERE id = ${id}
       `
       
-      if (!(requests as any).length) {
+      if (!requests.length) {
         return null
       }
       
-      const requestData = (requests as any)[0]
+      const requestData = requests[0]
       
       // Buscar propostas
       const proposals = await db.$queryRaw`
@@ -813,7 +813,7 @@ export class MarketplaceService extends EventEmitter {
         requirements: JSON.parse(requestData.requirements || '[]'),
         attachments: JSON.parse(requestData.attachments || '[]'),
         status: requestData.status,
-        proposals: (proposals as any[]).map(proposal => ({
+        proposals: proposals.map(proposal => ({
           id: proposal.id,
           requestId: proposal.request_id,
           supplierId: proposal.supplier_id,
@@ -896,26 +896,26 @@ export class MarketplaceService extends EventEmitter {
         `
       ])
 
-      const totalSuppliers = (stats[0] as any)[0]?.total || 0
-      const activeSuppliers = (stats[1] as any)[0]?.active || 0
-      const verifiedSuppliers = (stats[2] as any)[0]?.verified || 0
-      const totalRequests = (stats[3] as any)[0]?.total || 0
-      const openRequests = (stats[4] as any)[0]?.open || 0
-      const totalProposals = (stats[5] as any)[0]?.total || 0
-      const totalContracts = (stats[6] as any)[0]?.total || 0
-      const activeContracts = (stats[7] as any)[0]?.active || 0
-      const totalValue = (stats[8] as any)[0]?.total_value || 0
-      const averageProjectValue = (stats[9] as any)[0]?.avg_value || 0
-      const averageResponseTime = (stats[10] as any)[0]?.avg_response || 0
-      const successStats = (stats[11] as any)[0]
+      const totalSuppliers = (stats[0] as { total: number }[])[0]?.total || 0
+      const activeSuppliers = (stats[1] as { active: number }[])[0]?.active || 0
+      const verifiedSuppliers = (stats[2] as { verified: number }[])[0]?.verified || 0
+      const totalRequests = (stats[3] as { total: number }[])[0]?.total || 0
+      const openRequests = (stats[4] as { open: number }[])[0]?.open || 0
+      const totalProposals = (stats[5] as { total: number }[])[0]?.total || 0
+      const totalContracts = (stats[6] as { total: number }[])[0]?.total || 0
+      const activeContracts = (stats[7] as { active: number }[])[0]?.active || 0
+      const totalValue = (stats[8] as { total_value: number }[])[0]?.total_value || 0
+      const averageProjectValue = (stats[9] as { avg_value: number }[])[0]?.avg_value || 0
+      const averageResponseTime = (stats[10] as { avg_response: number }[])[0]?.avg_response || 0
+      const successStats = (stats[11] as { success_rate: number }[])[0]
       const successRate = successStats?.total_requests > 0 ? 
         (successStats.completed_requests / successStats.total_requests) * 100 : 0
-      const topCategories = (stats[12] as any[]).map(cat => ({
+      const topCategories = (stats[12] as { category: string; count: number }[]).map(cat => ({
         category: cat.category,
         count: cat.count,
         percentage: totalRequests > 0 ? (cat.count / totalRequests) * 100 : 0
       }))
-      const topStates = (stats[13] as any[]).map(state => ({
+      const topStates = (stats[13] as { state: string; count: number }[]).map(state => ({
         state: state.state,
         count: state.count,
         percentage: totalSuppliers > 0 ? (state.count / totalSuppliers) * 100 : 0
@@ -1040,7 +1040,7 @@ export class MarketplaceService extends EventEmitter {
         WHERE status = 'active'
         ORDER BY created_at DESC
         LIMIT 100
-      ` as any[]
+      ` as { category: string; count: number }[]
       
       // Convert to Supplier objects (simplified version)
       const suppliers: Supplier[] = allSuppliers.map(supplierData => ({

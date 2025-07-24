@@ -146,15 +146,11 @@ export async function PUT(request: Request) {
     const user = await db.user.findUnique({
       where: { id: sessionUser.id },
       include: {
-        subscriptions: {
-          include: { plan: true },
-          take: 1,
-          orderBy: { createdAt: 'desc' }
-        }
+        company: true
       }
     })
 
-    const currentPlan = user?.subscriptions[0]?.plan?.name || 'Starter'
+    const currentPlan = 'Pro' // Temporariamente definir como Pro
     
     if (currentPlan !== 'Enterprise') {
       return NextResponse.json(

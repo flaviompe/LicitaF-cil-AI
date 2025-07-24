@@ -135,7 +135,20 @@ export async function POST(request: Request) {
     }
 
     if (body.action === 'updateSettings') {
-      const settings = updateSettingsSchema.parse(body)
+      const parsedSettings = updateSettingsSchema.parse(body)
+      
+      // Ensure all required fields have defaults
+      const settings = {
+        ...parsedSettings,
+        preferences: parsedSettings.preferences ? {
+          opportunities: parsedSettings.preferences.opportunities ?? true,
+          certificates: parsedSettings.preferences.certificates ?? true,
+          proposals: parsedSettings.preferences.proposals ?? true,
+          payments: parsedSettings.preferences.payments ?? true,
+          system: parsedSettings.preferences.system ?? true,
+          aiAnalysis: parsedSettings.preferences.aiAnalysis ?? true
+        } : undefined
+      }
       
       const notificationService = getNotificationService()
       await notificationService.updateUserSettings(sessionUser.id, settings)

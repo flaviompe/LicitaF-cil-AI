@@ -118,7 +118,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     console.error('Erro ao processar checkout:', error)
   }
 
-  console.log('Checkout completed for user:', subscription.userId)
+  console.log('Checkout completed for customer:', customerId)
 }
 
 async function handleSubscriptionCreated(subscription: Stripe.Subscription) {

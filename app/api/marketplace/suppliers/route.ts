@@ -202,6 +202,7 @@ export async function POST(request: Request) {
     // Criar fornecedor
     const supplier = await marketplaceService.createSupplier({
       ...validatedData,
+      tradeName: validatedData.tradeName || validatedData.companyName,
       userId: sessionUser.id,
       certifications: [],
       documents: processedDocuments,

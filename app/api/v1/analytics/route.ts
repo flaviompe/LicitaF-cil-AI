@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
         },
         select: {
           id: true,
-          value: true,
+          estimatedValue: true,
           status: true,
           createdAt: true
         }

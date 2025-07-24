@@ -4,6 +4,21 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { chatService } from '@/lib/chat'
 
+interface SessionUser {
+  id: string
+  role: string
+  email: string
+  name?: string | null
+}
+
+interface QueryResult {
+  [key: string]: any
+}
+
+interface CountResult {
+  total: number
+}
+
 // GET /api/chat/sessions - Listar sessões de chat
 export async function GET(request: Request) {
   try {
@@ -13,7 +28,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
 
     const url = new URL(request.url)
     const status = url.searchParams.get('status')
@@ -52,7 +67,7 @@ export async function GET(request: Request) {
       ${status ? `AND status = ${status}` : ''}
     `
 
-    const total = (totalResult as any)[0]?.total || 0
+    const total = (totalResult as CountResult[])[0]?.total || 0
 
     return NextResponse.json({
       sessions,
@@ -82,7 +97,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
 
     const body = await request.json()
     const { subject, department, priority } = body
@@ -94,7 +109,7 @@ export async function POST(request: Request) {
       LIMIT 1
     `
 
-    if ((existingSession as any).length > 0) {
+    if ((existingSession as QueryResult[]).length > 0) {
       return NextResponse.json(
         { error: 'Você já possui uma sessão de chat ativa' },
         { status: 409 }
@@ -129,7 +144,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      session: (newSession as any)[0]
+      session: (newSession as QueryResult[])[0]
     })
 
   } catch (error) {

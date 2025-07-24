@@ -719,7 +719,7 @@ export const trackEmailSent = async (emailId: string, userId: string, userEmail:
 export const trackEmailOpened = async (
   emailId: string, 
   userEmail: string, 
-  metadata?: { ipAddress?: string, userAgent?: string }
+  metadata?: { ipAddress?: string, userAgent?: string, deviceType?: string }
 ): Promise<void> => {
   const service = getEmailAnalyticsService()
   await service.trackEvent({

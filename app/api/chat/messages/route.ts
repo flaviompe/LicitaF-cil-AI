@@ -4,6 +4,26 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { z } from 'zod'
 
+interface SessionUser {
+  id: string
+  role: string
+  email: string
+  name?: string | null
+}
+
+interface QueryResult {
+  [key: string]: any
+}
+
+interface CountResult {
+  total: number
+}
+
+interface ChatSession {
+  id: string
+  status: string
+}
+
 const messageSchema = z.object({
   chatId: z.string(),
   content: z.string().min(1),
@@ -19,7 +39,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
 
     const url = new URL(request.url)
     const chatId = url.searchParams.get('chatId')
@@ -66,7 +86,7 @@ export async function GET(request: Request) {
       WHERE chat_id = ${chatId}
     `
 
-    const total = (totalResult as any)[0]?.total || 0
+    const total = (totalResult as CountResult[])[0]?.total || 0
 
     return NextResponse.json({
       messages,
@@ -96,7 +116,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
     const body = await request.json()
     const { chatId, content, type } = messageSchema.parse(body)
 
@@ -106,11 +126,11 @@ export async function POST(request: Request) {
       WHERE id = ${chatId} AND user_id = ${sessionUser.id}
     `
 
-    if (!(chatSession as any).length) {
+    if (!(chatSession as QueryResult[]).length) {
       return NextResponse.json({ error: 'Chat não encontrado' }, { status: 404 })
     }
 
-    const chat = (chatSession as any)[0]
+    const chat = (chatSession as ChatSession[])[0]
     if (chat.status === 'closed') {
       return NextResponse.json({ error: 'Chat está fechado' }, { status: 400 })
     }
@@ -146,7 +166,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: (newMessage as any)[0]
+      message: (newMessage as QueryResult[])[0]
     })
 
   } catch (error) {

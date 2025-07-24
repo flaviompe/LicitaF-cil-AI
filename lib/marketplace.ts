@@ -805,6 +805,20 @@ export class MarketplaceService extends EventEmitter {
     }
   }
 
+  async incrementSupplierViews(supplierId: string): Promise<void> {
+    try {
+      await db.$executeRaw`
+        UPDATE suppliers 
+        SET views = COALESCE(views, 0) + 1, 
+            last_viewed_at = NOW()
+        WHERE id = ${supplierId}
+      `
+    } catch (error) {
+      console.error('Erro ao incrementar visualizações do fornecedor:', error)
+      // Don't throw error to avoid breaking the main flow
+    }
+  }
+
   private calculateRating(reviews: any[]): Supplier['rating'] {
     if (reviews.length === 0) {
       return {

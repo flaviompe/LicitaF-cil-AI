@@ -4,6 +4,14 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import type { User, Permission } from '@/types/admin'
 
+interface SessionUser {
+  id?: string
+  name?: string | null
+  email?: string | null
+  image?: string | null
+  role?: User['role']
+}
+
 interface AuthContextType {
   user: User | null
   isLoading: boolean
@@ -82,7 +90,7 @@ export function AdminAuthProvider({ children }: AdminAuthProviderProps) {
         name: session.user.name || '',
         email: session.user.email || '',
         imageUrl: session.user.image || undefined,
-        role: (session.user as any).role || 'COLABORADOR',
+        role: (session.user as SessionUser).role || 'COLABORADOR',
         createdAt: new Date(),
         updatedAt: new Date()
       }

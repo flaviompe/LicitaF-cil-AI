@@ -819,6 +819,75 @@ export class MarketplaceService extends EventEmitter {
     }
   }
 
+  async updateSupplier(supplierId: string, data: Partial<Supplier>): Promise<Supplier> {
+    try {
+      // Simple update approach - only update commonly used fields
+      if (data.companyName !== undefined) {
+        await db.$executeRaw`
+          UPDATE suppliers 
+          SET company_name = ${data.companyName}, updated_at = NOW()
+          WHERE id = ${supplierId}
+        `
+      }
+      if (data.description !== undefined) {
+        await db.$executeRaw`
+          UPDATE suppliers 
+          SET description = ${data.description}, updated_at = NOW()
+          WHERE id = ${supplierId}
+        `
+      }
+      if (data.status !== undefined) {
+        await db.$executeRaw`
+          UPDATE suppliers 
+          SET status = ${data.status}, updated_at = NOW()
+          WHERE id = ${supplierId}
+        `
+      }
+      
+      // Update timestamp in any case
+      await db.$executeRaw`
+        UPDATE suppliers 
+        SET updated_at = NOW()
+        WHERE id = ${supplierId}
+      `
+      
+      const updatedSupplier = await this.getSupplierById(supplierId)
+      if (!updatedSupplier) {
+        throw new Error('Fornecedor não encontrado após atualização')
+      }
+      
+      this.emit('supplier_updated', updatedSupplier)
+      return updatedSupplier
+    } catch (error) {
+      console.error('Erro ao atualizar fornecedor:', error)
+      throw error
+    }
+  }
+
+  async deleteSupplier(supplierId: string): Promise<void> {
+    try {
+      await db.$executeRaw`
+        DELETE FROM suppliers 
+        WHERE id = ${supplierId}
+      `
+      
+      this.emit('supplier_deleted', supplierId)
+    } catch (error) {
+      console.error('Erro ao deletar fornecedor:', error)
+      throw error
+    }
+  }
+
+  async getActiveContractsBySupplier(supplierId: string): Promise<Contract[]> {
+    try {
+      // Return empty array for now - contracts would be in a separate table
+      return []
+    } catch (error) {
+      console.error('Erro ao buscar contratos ativos do fornecedor:', error)
+      throw error
+    }
+  }
+
   private calculateRating(reviews: any[]): Supplier['rating'] {
     if (reviews.length === 0) {
       return {

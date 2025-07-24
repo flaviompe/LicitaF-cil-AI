@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       return auth as NextResponse
     }
 
-    const { apiKey, rateLimit } = auth
+    const { apiKey, rateLimit } = auth as { success: boolean; apiKey: any; rateLimit: any }
     const url = new URL(request.url)
     const params = Object.fromEntries(url.searchParams)
     

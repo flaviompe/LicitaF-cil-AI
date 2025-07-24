@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
           opportunity: {
             company: { userId: apiKey.userId }
           },
-          status: { in: ['WON', 'LOST'] }
+          status: { in: ['ACCEPTED', 'REJECTED'] }
         },
         select: {
           status: true

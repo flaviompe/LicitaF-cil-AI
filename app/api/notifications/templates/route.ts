@@ -150,7 +150,7 @@ export async function PUT(request: Request) {
       }
     })
 
-    const currentPlan = 'Pro' // Temporariamente definir como Pro
+    const currentPlan: string = 'Pro' // Temporariamente definir como Pro
     
     if (currentPlan !== 'Enterprise') {
       return NextResponse.json(

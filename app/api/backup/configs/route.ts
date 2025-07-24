@@ -14,7 +14,7 @@ const createConfigSchema = z.object({
   encryption: z.boolean(),
   destinations: z.array(z.object({
     type: z.enum(['local', 's3', 'gcs', 'azure', 'ftp']),
-    config: z.record(z.any()),
+    config: z.record(z.unknown()),
     enabled: z.boolean()
   })),
   tables: z.array(z.string())
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     // Verificar se o usuário tem permissão para backups
     const user = await db.user.findUnique({
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
     // })
 
     // Temporariamente retornar array vazio até modelo ser criado
-    const configs: any[] = []
+    const configs: Array<Record<string, any>> = []
 
     return NextResponse.json({ configs })
 
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     const data = createConfigSchema.parse(body)
@@ -159,7 +159,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     const { id, ...updateData } = body
@@ -215,7 +215,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const url = new URL(request.url)
     const configId = url.searchParams.get('id')

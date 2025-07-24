@@ -960,6 +960,94 @@ export class MarketplaceService extends EventEmitter {
     }
   }
 
+  async searchSuppliers(params: any): Promise<{ data: Supplier[], total: number }> {
+    try {
+      // Simple implementation - just get all suppliers and filter in memory for now
+      const allSuppliers = await db.$queryRaw`
+        SELECT * FROM suppliers 
+        WHERE status = 'active'
+        ORDER BY created_at DESC
+        LIMIT 100
+      ` as any[]
+      
+      // Convert to Supplier objects (simplified version)
+      const suppliers: Supplier[] = allSuppliers.map(supplierData => ({
+        id: supplierData.id,
+        userId: supplierData.user_id,
+        companyName: supplierData.company_name,
+        tradeName: supplierData.trade_name,
+        cnpj: supplierData.cnpj,
+        description: supplierData.description,
+        categories: JSON.parse(supplierData.categories || '[]'),
+        specialties: JSON.parse(supplierData.specialties || '[]'),
+        address: JSON.parse(supplierData.address || '{}'),
+        contact: JSON.parse(supplierData.contact || '{}'),
+        workingHours: JSON.parse(supplierData.working_hours || '{}'),
+        serviceAreas: JSON.parse(supplierData.service_areas || '[]'),
+        portfolio: JSON.parse(supplierData.portfolio || '{}'),
+        certifications: JSON.parse(supplierData.certifications || '[]'),
+        documents: JSON.parse(supplierData.documents || '[]'),
+        reviews: [], // Skip reviews for search performance
+        rating: {
+          average: 0,
+          count: 0,
+          breakdown: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+        },
+        status: supplierData.status,
+        featured: supplierData.featured,
+        verified: supplierData.verified,
+        premiumUntil: supplierData.premium_until,
+        createdAt: supplierData.created_at,
+        updatedAt: supplierData.updated_at,
+        lastActiveAt: supplierData.last_active_at,
+        responseTime: supplierData.response_time,
+        responseRate: supplierData.response_rate,
+        completionRate: supplierData.completion_rate,
+        repeatClientRate: supplierData.repeat_client_rate,
+        metadata: JSON.parse(supplierData.metadata || '{}')
+      }))
+      
+      // Apply basic filtering
+      let filteredSuppliers = suppliers
+      
+      if (params.search) {
+        const searchTerm = params.search.toLowerCase()
+        filteredSuppliers = filteredSuppliers.filter(supplier => 
+          supplier.companyName.toLowerCase().includes(searchTerm) ||
+          supplier.description.toLowerCase().includes(searchTerm)
+        )
+      }
+      
+      if (params.categories && Array.isArray(params.categories)) {
+        filteredSuppliers = filteredSuppliers.filter(supplier =>
+          params.categories.some((cat: string) => 
+            supplier.categories.includes(cat)
+          )
+        )
+      }
+      
+      // Simple pagination
+      const page = parseInt(params.page) || 1
+      const limit = parseInt(params.limit) || 20
+      const startIndex = (page - 1) * limit
+      const endIndex = startIndex + limit
+      
+      const paginatedSuppliers = filteredSuppliers.slice(startIndex, endIndex)
+      
+      return {
+        data: paginatedSuppliers,
+        total: filteredSuppliers.length
+      }
+    } catch (error) {
+      console.error('Erro ao buscar fornecedores:', error)
+      // Return empty result on error
+      return {
+        data: [],
+        total: 0
+      }
+    }
+  }
+
   private calculateRating(reviews: any[]): Supplier['rating'] {
     if (reviews.length === 0) {
       return {

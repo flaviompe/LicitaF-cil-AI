@@ -93,14 +93,15 @@ const searchSchema = z.object({
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url)
-    const params = Object.fromEntries(url.searchParams)
+    const searchParams = Object.fromEntries(url.searchParams)
     
     // Converter arrays de string para arrays
-    if (params.categories) {
-      params.categories = params.categories.split(',')
+    const params: any = { ...searchParams }
+    if (searchParams.categories) {
+      params.categories = searchParams.categories.split(',')
     }
-    if (params.states) {
-      params.states = params.states.split(',')
+    if (searchParams.states) {
+      params.states = searchParams.states.split(',')
     }
     
     // Converter valores numéricos

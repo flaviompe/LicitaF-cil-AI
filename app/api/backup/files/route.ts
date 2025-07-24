@@ -14,13 +14,13 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const url = new URL(request.url)
     const configId = url.searchParams.get('configId')
     
     // Construir filtros
-    const where: any = {
+    const where: Record<string, any> = {
       config: {
         userId: sessionUser.id
       }
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     // })
 
     // Temporariamente retornar array vazio até modelo ser criado
-    const files: any[] = []
+    const files: Array<Record<string, any>> = []
 
     return NextResponse.json({ files })
 
@@ -66,7 +66,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
     const fileId = params.id
     
     // Verificar se o arquivo pertence ao usuário

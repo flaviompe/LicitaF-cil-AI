@@ -183,4 +183,4 @@ TELEGRAM_BOT_TOKEN=...
 
 ---
 
-**🚀 Plataforma desenvolvida para democratizar o acesso às licitações públicas no Brasil**
+**🚀 Plataforma desenvolvida para democratizar o acesso às licitações públicas no Brasil**# Force new deployment

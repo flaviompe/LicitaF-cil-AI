@@ -147,12 +147,12 @@ export async function GET(request: NextRequest) {
       },
       certificates: {
         total: certificates.length,
-        active: certificates.filter(c => c.status === 'ACTIVE').length,
+        active: certificates.filter(c => c.status === 'VALID').length,
         expired: certificates.filter(c => c.status === 'EXPIRED').length,
         expiringSoon: certificates.filter(c => 
-          c.status === 'ACTIVE' && 
-          c.expiresAt && 
-          c.expiresAt.getTime() <= Date.now() + 30 * 24 * 60 * 60 * 1000
+          c.status === 'EXPIRING_SOON' && 
+          c.expiryDate && 
+          c.expiryDate.getTime() <= Date.now() + 30 * 24 * 60 * 60 * 1000
         ).length
       },
       performance: {

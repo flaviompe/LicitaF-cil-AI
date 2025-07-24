@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { marketplaceService } from '@/lib/marketplace'
+import { db } from '@/lib/db'
 
 // GET /api/marketplace/suppliers/[id] - Obter fornecedor específico
 export async function GET(

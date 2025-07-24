@@ -606,6 +606,78 @@ export class MarketplaceService extends EventEmitter {
     }
   }
 
+  async getSupplierByUserId(userId: string): Promise<Supplier | null> {
+    try {
+      const suppliers = await db.$queryRaw`
+        SELECT * FROM suppliers WHERE user_id = ${userId}
+      `
+      
+      if (!(suppliers as any).length) {
+        return null
+      }
+      
+      const supplierData = (suppliers as any)[0]
+      
+      // Buscar avaliações
+      const reviews = await db.$queryRaw`
+        SELECT * FROM supplier_reviews 
+        WHERE supplier_id = ${supplierData.id} 
+        ORDER BY created_at DESC
+      `
+      
+      // Calcular estatísticas de avaliação
+      const rating = this.calculateRating(reviews as any[])
+      
+      return {
+        id: supplierData.id,
+        userId: supplierData.user_id,
+        companyName: supplierData.company_name,
+        tradeName: supplierData.trade_name,
+        cnpj: supplierData.cnpj,
+        description: supplierData.description,
+        categories: JSON.parse(supplierData.categories || '[]'),
+        specialties: JSON.parse(supplierData.specialties || '[]'),
+        address: JSON.parse(supplierData.address || '{}'),
+        contact: JSON.parse(supplierData.contact || '{}'),
+        workingHours: JSON.parse(supplierData.working_hours || '{}'),
+        serviceAreas: JSON.parse(supplierData.service_areas || '[]'),
+        portfolio: JSON.parse(supplierData.portfolio || '{}'),
+        certifications: JSON.parse(supplierData.certifications || '[]'),
+        documents: JSON.parse(supplierData.documents || '[]'),
+        reviews: (reviews as any[]).map(review => ({
+          id: review.id,
+          supplierId: review.supplier_id,
+          clientId: review.client_id,
+          clientName: review.client_name,
+          rating: review.rating,
+          comment: review.comment,
+          contractId: review.contract_id,
+          createdAt: review.created_at,
+          response: review.response_content ? {
+            content: review.response_content,
+            respondedAt: review.response_date
+          } : undefined
+        })),
+        rating,
+        status: supplierData.status,
+        featured: supplierData.featured,
+        verified: supplierData.verified,
+        premiumUntil: supplierData.premium_until,
+        createdAt: supplierData.created_at,
+        updatedAt: supplierData.updated_at,
+        lastActiveAt: supplierData.last_active_at,
+        responseTime: supplierData.response_time,
+        responseRate: supplierData.response_rate,
+        completionRate: supplierData.completion_rate,
+        repeatClientRate: supplierData.repeat_client_rate,
+        metadata: JSON.parse(supplierData.metadata || '{}')
+      }
+    } catch (error) {
+      console.error('Erro ao buscar fornecedor por userId:', error)
+      return null
+    }
+  }
+
   async createServiceRequest(data: Omit<ServiceRequest, 'id' | 'proposals' | 'createdAt' | 'updatedAt' | 'views' | 'interestedSuppliers'>): Promise<ServiceRequest> {
     try {
       const requestId = randomUUID()

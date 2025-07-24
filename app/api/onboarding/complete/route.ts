@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     const data = onboardingSchema.parse(body)
@@ -96,11 +96,11 @@ export async function POST(request: Request) {
         const certificates = data.documents.certificates.map(cert => ({
           userId: sessionUser.id,
           companyId: user.company!.id,
-          type: cert.type as any, // Validar com enum
+          type: cert.type as 'RECEITA_FEDERAL' | 'FGTS' | 'INSS' | 'TRABALHISTA' | 'ESTADUAL' | 'MUNICIPAL' | 'ANVISA' | 'CREA' | 'OTHER',
           issuer: cert.issuer,
           issueDate: new Date(),
           expiryDate: new Date(cert.expiryDate),
-          status: 'VALID' as any,
+          status: 'VALID' as const,
           documentUrl: cert.documentUrl,
         }))
 

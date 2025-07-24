@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     const { editalText, analysisType, userId } = analyzeSchema.parse(body)

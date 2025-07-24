@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string; role?: string }
 
     // Verificar se o usuário é admin/agente
     const user = await db.user.findUnique({
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
 
     // Construir query base
     let whereClause = 'WHERE 1=1'
-    const params: any[] = []
+    const params: string[] = []
     
     if (status) {
       whereClause += ` AND s.status = ?`
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
       ${whereClause}
     `
 
-    const total = (totalResult as any)[0]?.total || 0
+    const total = (totalResult as { total: number }[])[0]?.total || 0
 
     // Estatísticas gerais
     const [waitingCount, activeCount, closedToday] = await Promise.all([
@@ -114,9 +114,9 @@ export async function GET(request: Request) {
         hasMore: offset + limit < total
       },
       stats: {
-        waiting: (waitingCount as any)[0]?.count || 0,
-        active: (activeCount as any)[0]?.count || 0,
-        closedToday: (closedToday as any)[0]?.count || 0
+        waiting: (waitingCount as { count: number }[])[0]?.count || 0,
+        active: (activeCount as { count: number }[])[0]?.count || 0,
+        closedToday: (closedToday as { count: number }[])[0]?.count || 0
       }
     })
 

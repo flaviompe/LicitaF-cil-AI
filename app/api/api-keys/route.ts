@@ -14,7 +14,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
     const apiKeys = await apiService.getUserApiKeys(sessionUser.id)
     
     // Remover a chave real por segurança
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     const data = createApiKeySchema.parse(body)
@@ -133,7 +133,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const url = new URL(request.url)
     const keyId = url.searchParams.get('id')

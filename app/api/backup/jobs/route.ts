@@ -13,14 +13,14 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const url = new URL(request.url)
     const configId = url.searchParams.get('configId')
     const status = url.searchParams.get('status')
     
     // Construir filtros
-    const where: any = {
+    const where: Record<string, any> = {
       config: {
         userId: sessionUser.id
       }
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
     // })
 
     // Implementação temporária
-    const jobs: any[] = []
+    const jobs: Array<Record<string, any>> = []
 
     return NextResponse.json({ jobs })
 

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: false,
       error: 'Falha ao iniciar integrações',
-      details: error.message
+      details: error instanceof Error ? error.message : String(error)
     }, { status: 500 })
   }
 }

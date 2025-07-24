@@ -468,7 +468,7 @@ export function RatingSystem({
           <span className="text-sm font-medium">Ordenar por:</span>
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as 'recent' | 'helpful' | 'rating')}
             className="text-sm border rounded px-2 py-1"
           >
             <option value="recent">Mais Recentes</option>

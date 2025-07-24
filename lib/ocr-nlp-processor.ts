@@ -5,6 +5,7 @@ import OpenAI from 'openai';
 import { z } from 'zod';
 import sharp from 'sharp';
 import mammoth from 'mammoth';
+import { promises as fs } from 'fs';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -166,7 +167,6 @@ export class OCRNLPProcessor {
   }
 
   private async validateFile(filePath: string, config: ProcessingConfig): Promise<void> {
-    const fs = require('fs').promises;
     
     try {
       const stats = await fs.stat(filePath);

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { unlinkSync, existsSync } from 'fs'
+import { join } from 'path'
 
 // GET /api/backup/files - Listar arquivos de backup
 export async function GET(request: Request) {
@@ -89,13 +91,11 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     // Deletar arquivo físico
     try {
-      const fs = require('fs')
-      const path = require('path')
-      const backupDir = process.env.BACKUP_DIR || path.join(process.cwd(), 'backups')
-      const filepath = path.join(backupDir, file.filename)
+      const backupDir = process.env.BACKUP_DIR || join(process.cwd(), 'backups')
+      const filepath = join(backupDir, file.filename)
       
-      if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath)
+      if (existsSync(filepath)) {
+        unlinkSync(filepath)
       }
     } catch (error) {
       console.error('Erro ao deletar arquivo físico:', error)

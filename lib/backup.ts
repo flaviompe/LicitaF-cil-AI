@@ -1,5 +1,6 @@
 import { db } from '@/lib/db'
-import { createReadStream, createWriteStream, existsSync, mkdirSync } from 'fs'
+import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync } from 'fs'
+import { createHash } from 'crypto'
 import { join } from 'path'
 import { createGzip, createGunzip } from 'zlib'
 import { pipeline } from 'stream/promises'
@@ -363,9 +364,8 @@ export class BackupService extends EventEmitter {
     })
 
     // Calcular tamanho e checksum
-    const stats = require('fs').statSync(filepath)
-    const crypto = require('crypto')
-    const hash = crypto.createHash('sha256')
+    const stats = statSync(filepath)
+    const hash = createHash('sha256')
     const fileStream = createReadStream(filepath)
     
     fileStream.on('data', (chunk) => hash.update(chunk))

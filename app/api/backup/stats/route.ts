@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       Promise.resolve({ _sum: { size: 0 } }),
       
       // Taxa de sucesso
-      Promise.resolve([]),
+      Promise.resolve([] as { status: string }[]),
       
       // Último backup
       Promise.resolve(null),

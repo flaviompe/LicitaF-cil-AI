@@ -189,12 +189,22 @@ export async function POST(request: Request) {
       )
     }
     
+    // Processar documentos com propriedades necessárias
+    const processedDocuments = (validatedData.documents || []).map((doc: any) => ({
+      id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type: doc.type || 'other',
+      name: doc.name,
+      url: doc.url,
+      uploadedAt: new Date(),
+      verified: false
+    }))
+    
     // Criar fornecedor
     const supplier = await marketplaceService.createSupplier({
       ...validatedData,
       userId: sessionUser.id,
       certifications: [],
-      documents: validatedData.documents || [],
+      documents: processedDocuments,
       status: 'pending',
       featured: false,
       verified: false,

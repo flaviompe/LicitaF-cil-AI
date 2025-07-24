@@ -4,8 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 interface UserGrowthData {
-  date: string
-  count: number
+  month: string
+  users: number
+  growth: number
 }
 
 interface UserGrowthChartProps {
@@ -13,23 +14,19 @@ interface UserGrowthChartProps {
 }
 
 export function UserGrowthChart({ data }: UserGrowthChartProps) {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('pt-BR', { 
-      day: '2-digit', 
-      month: '2-digit' 
-    })
+  const formatMonth = (monthString: string) => {
+    return monthString
   }
 
-  const totalNewUsers = data.reduce((sum, item) => sum + item.count, 0)
-  const averageDaily = totalNewUsers / data.length
+  const totalNewUsers = data.reduce((sum, item) => sum + item.users, 0)
+  const averageMonthly = totalNewUsers / data.length
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Crescimento de Usuários</CardTitle>
         <CardDescription>
-          Novos usuários nos últimos 30 dias
+          Novos usuários nos últimos 6 meses
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -45,10 +42,10 @@ export function UserGrowthChart({ data }: UserGrowthChartProps) {
             </div>
             <div>
               <div className="text-2xl font-bold text-green-600">
-                {averageDaily.toFixed(1)}
+                {averageMonthly.toFixed(1)}
               </div>
               <div className="text-sm text-gray-500">
-                Média diária
+                Média mensal
               </div>
             </div>
           </div>
@@ -59,8 +56,8 @@ export function UserGrowthChart({ data }: UserGrowthChartProps) {
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
-                dataKey="date" 
-                tickFormatter={formatDate}
+                dataKey="month" 
+                tickFormatter={formatMonth}
                 tick={{ fontSize: 12 }}
               />
               <YAxis 
@@ -68,12 +65,12 @@ export function UserGrowthChart({ data }: UserGrowthChartProps) {
                 allowDecimals={false}
               />
               <Tooltip 
-                labelFormatter={(label) => formatDate(label)}
+                labelFormatter={(label) => formatMonth(label)}
                 formatter={(value) => [value, 'Novos usuários']}
               />
               <Line 
                 type="monotone" 
-                dataKey="count" 
+                dataKey="users" 
                 stroke="#2563eb" 
                 strokeWidth={2}
                 dot={{ fill: '#2563eb', strokeWidth: 2, r: 4 }}

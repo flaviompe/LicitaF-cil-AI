@@ -203,6 +203,7 @@ export async function POST(request: Request) {
     const supplier = await marketplaceService.createSupplier({
       ...validatedData,
       tradeName: validatedData.tradeName || validatedData.companyName,
+      categories: (validatedData.categories || []) as ('engineering' | 'construction' | 'services' | 'technology' | 'consulting' | 'supplies' | 'healthcare' | 'education' | 'security' | 'cleaning' | 'food' | 'transportation' | 'other')[],
       userId: sessionUser.id,
       certifications: [],
       documents: processedDocuments,

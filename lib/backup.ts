@@ -247,7 +247,7 @@ export class BackupService extends EventEmitter {
   }
 
   private async collectBackupData(job: BackupJob, config: BackupConfig): Promise<any> {
-    const data: any = {
+    const data: { metadata: { configId: string; timestamp: string; version: string }; tables: Record<string, any[]> } = {
       metadata: {
         configId: config.id,
         timestamp: new Date().toISOString(),
@@ -316,7 +316,7 @@ export class BackupService extends EventEmitter {
       }
 
       // Acessar modelo dinamicamente
-      const model = (db as any)[modelName]
+      const model = (db as Record<string, any>)[modelName]
       if (!model) {
         throw new Error(`Modelo ${modelName} não encontrado`)
       }
@@ -352,7 +352,7 @@ export class BackupService extends EventEmitter {
     
     if (config.compression) {
       const gzipStream = createGzip()
-      writeStream = gzipStream.pipe(writeStream) as any
+      writeStream = gzipStream.pipe(writeStream) as NodeJS.WritableStream
     }
 
     await new Promise<void>((resolve, reject) => {

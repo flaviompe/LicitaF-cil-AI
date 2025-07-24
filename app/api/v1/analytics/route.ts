@@ -133,9 +133,9 @@ export async function GET(request: NextRequest) {
         total: opportunities.length,
         open: opportunities.filter(o => o.status === 'OPEN').length,
         closed: opportunities.filter(o => o.status === 'CLOSED').length,
-        totalValue: opportunities.reduce((sum, o) => sum + (o.value || 0), 0),
+        totalValue: opportunities.reduce((sum, o) => sum + (o.estimatedValue || 0), 0),
         averageValue: opportunities.length > 0 
-          ? opportunities.reduce((sum, o) => sum + (o.value || 0), 0) / opportunities.length 
+          ? opportunities.reduce((sum, o) => sum + (o.estimatedValue || 0), 0) / opportunities.length 
           : 0
       },
       proposals: {

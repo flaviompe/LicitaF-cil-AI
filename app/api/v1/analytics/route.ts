@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
         select: {
           id: true,
           status: true,
-          expiresAt: true,
+          expiryDate: true,
           createdAt: true
         }
       }),

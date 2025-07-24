@@ -69,7 +69,7 @@ interface TicketMessage {
   content: string
   isInternal: boolean
   createdAt: Date
-  attachments: any[]
+  attachments: Array<{ id: string; filename: string; url: string }>
 }
 
 interface TicketInterfaceProps {
@@ -94,7 +94,7 @@ export function TicketInterface({ className }: TicketInterfaceProps) {
     category: 'general' as const,
     departmentId: ''
   })
-  const [departments, setDepartments] = useState<any[]>([])
+  const [departments, setDepartments] = useState<Array<{ id: string; name: string }>>([])
   const [stats, setStats] = useState({
     total: 0,
     open: 0,
@@ -225,9 +225,9 @@ export function TicketInterface({ className }: TicketInterfaceProps) {
       if (response.ok) {
         const data = await response.json()
         setTickets(prev => prev.map(ticket => 
-          ticket.id === ticketId ? { ...ticket, status: status as any } : ticket
+          ticket.id === ticketId ? { ...ticket, status: status as TicketData['status'] } : ticket
         ))
-        setSelectedTicket(prev => prev ? { ...prev, status: status as any } : null)
+        setSelectedTicket(prev => prev ? { ...prev, status: status as TicketData['status'] } : null)
         fetchStats()
       }
     } catch (error) {
@@ -372,7 +372,7 @@ export function TicketInterface({ className }: TicketInterfaceProps) {
                   <Label htmlFor="priority">Prioridade</Label>
                   <Select
                     value={newTicket.priority}
-                    onValueChange={(value) => setNewTicket(prev => ({ ...prev, priority: value as any }))}
+                    onValueChange={(value) => setNewTicket(prev => ({ ...prev, priority: value as 'low' | 'medium' | 'high' | 'urgent' }))}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -390,7 +390,7 @@ export function TicketInterface({ className }: TicketInterfaceProps) {
                   <Label htmlFor="category">Categoria</Label>
                   <Select
                     value={newTicket.category}
-                    onValueChange={(value) => setNewTicket(prev => ({ ...prev, category: value as any }))}
+                    onValueChange={(value) => setNewTicket(prev => ({ ...prev, category: value as 'technical' | 'billing' | 'feature_request' | 'bug_report' | 'general' }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

@@ -59,8 +59,7 @@ const nextConfig = {
   // Enable compression for better performance
   compress: true,
   
-  // Reduce bundle size
-  swcMinify: true,
+  // Bundle optimization (swcMinify is deprecated in Next.js 15)
   
   webpack: (config, { isServer }) => {
     if (!isServer) {

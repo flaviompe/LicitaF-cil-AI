@@ -4,6 +4,21 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { chatService } from '@/lib/chat'
 
+interface SessionUser {
+  id: string
+  role: string
+  email: string
+  name?: string | null
+}
+
+interface QueryResult {
+  [key: string]: any
+}
+
+interface CountResult {
+  count: number
+}
+
 // POST /api/chat/admin/sessions/[id]/take - Agente assume o chat
 export async function POST(
   request: Request,
@@ -16,7 +31,7 @@ export async function POST(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
 
     const chatId = params.id
 
@@ -35,14 +50,14 @@ export async function POST(
       WHERE id = ${chatId} AND status = 'waiting'
     `
 
-    if (!(chatSession as any).length) {
+    if (!(chatSession as QueryResult[]).length) {
       return NextResponse.json(
         { error: 'Chat não encontrado ou não está aguardando' },
         { status: 404 }
       )
     }
 
-    const chat = (chatSession as any)[0]
+    const chat = (chatSession as QueryResult[])[0]
 
     // Verificar se o agente já tem muitos chats ativos
     const agentActiveChats = await db.$queryRaw`
@@ -51,7 +66,7 @@ export async function POST(
       WHERE agent_id = ${sessionUser.id} AND status = 'active'
     `
 
-    const activeCount = (agentActiveChats as any)[0]?.count || 0
+    const activeCount = (agentActiveChats as CountResult[])[0]?.count || 0
     const maxConcurrentChats = 5 // Limite por agente
 
     if (activeCount >= maxConcurrentChats) {

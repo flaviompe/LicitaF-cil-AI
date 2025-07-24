@@ -5,6 +5,22 @@ import { db } from '@/lib/db'
 import { chatService } from '@/lib/chat'
 import { z } from 'zod'
 
+interface SessionUser {
+  id: string
+  role: string
+  email: string
+  name?: string | null
+}
+
+interface QueryResult {
+  [key: string]: any
+}
+
+interface SessionStats {
+  duration: number
+  message_count: number
+}
+
 const closeSchema = z.object({
   reason: z.string().optional(),
   rating: z.number().min(1).max(5).optional(),
@@ -23,7 +39,7 @@ export async function POST(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
 
     const chatId = params.id
     const body = await request.json()
@@ -44,14 +60,14 @@ export async function POST(
       WHERE id = ${chatId} AND status != 'closed'
     `
 
-    if (!(chatSession as any).length) {
+    if (!(chatSession as QueryResult[]).length) {
       return NextResponse.json(
         { error: 'Chat não encontrado ou já está fechado' },
         { status: 404 }
       )
     }
 
-    const chat = (chatSession as any)[0]
+    const chat = (chatSession as QueryResult[])[0]
 
     // Verificar se o agente tem permissão para fechar este chat
     if (chat.agent_id && chat.agent_id !== sessionUser.id) {
@@ -103,7 +119,7 @@ export async function POST(
       WHERE id = ${chatId}
     `
 
-    const stats = (sessionStats as any)[0]
+    const stats = (sessionStats as SessionStats[])[0]
 
     return NextResponse.json({ 
       success: true,

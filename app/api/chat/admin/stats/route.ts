@@ -3,6 +3,42 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 
+interface SessionUser {
+  id: string
+  role: string
+  email: string
+  name?: string | null
+}
+
+interface CountResult {
+  total?: number
+  active?: number
+  resolved?: number
+  waiting?: number
+  closed?: number
+  today?: number
+}
+
+interface StatsResult {
+  avg_response?: number
+  avg_rating?: number
+  avg_duration?: number
+}
+
+interface ResolutionResult {
+  total: number
+  resolved: number
+}
+
+interface SystemCountResult {
+  total?: number
+  waiting?: number
+  active?: number
+  closed?: number
+  avg_rating?: number
+  active_agents?: number
+}
+
 // GET /api/chat/admin/stats - Estatísticas para agentes
 export async function GET(request: Request) {
   try {
@@ -12,7 +48,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as SessionUser
 
     // Verificar se o usuário é admin/agente
     const user = await db.user.findUnique({
@@ -118,9 +154,9 @@ export async function GET(request: Request) {
       resolutionRate
     ] = agentStats
 
-    const total = (totalChats as any)[0]?.total || 0
-    const resolved = (resolvedChats as any)[0]?.resolved || 0
-    const resolutionRateData = (resolutionRate as any)[0]
+    const total = (totalChats as CountResult[])[0]?.total || 0
+    const resolved = (resolvedChats as CountResult[])[0]?.resolved || 0
+    const resolutionRateData = (resolutionRate as ResolutionResult[])[0]
     const resolutionPercentage = resolutionRateData?.total > 0 ? 
       (resolutionRateData.resolved / resolutionRateData.total) * 100 : 0
 
@@ -187,12 +223,12 @@ export async function GET(request: Request) {
       ])
 
       systemStats = {
-        totalChats: (systemStatsData[0] as any)[0]?.total || 0,
-        waitingChats: (systemStatsData[1] as any)[0]?.waiting || 0,
-        activeChats: (systemStatsData[2] as any)[0]?.active || 0,
-        closedChats: (systemStatsData[3] as any)[0]?.closed || 0,
-        avgRating: (systemStatsData[4] as any)[0]?.avg_rating || 0,
-        activeAgents: (systemStatsData[5] as any)[0]?.active_agents || 0
+        totalChats: (systemStatsData[0] as SystemCountResult[])[0]?.total || 0,
+        waitingChats: (systemStatsData[1] as SystemCountResult[])[0]?.waiting || 0,
+        activeChats: (systemStatsData[2] as SystemCountResult[])[0]?.active || 0,
+        closedChats: (systemStatsData[3] as SystemCountResult[])[0]?.closed || 0,
+        avgRating: (systemStatsData[4] as SystemCountResult[])[0]?.avg_rating || 0,
+        activeAgents: (systemStatsData[5] as SystemCountResult[])[0]?.active_agents || 0
       }
     }
 
@@ -200,12 +236,12 @@ export async function GET(request: Request) {
       period,
       stats: {
         totalChats: total,
-        activeChats: (activeChats as any)[0]?.active || 0,
-        avgResponseTime: (avgResponseTime as any)[0]?.avg_response || 0,
-        avgRating: (avgRating as any)[0]?.avg_rating || 0,
-        todayChats: (todayChats as any)[0]?.today || 0,
+        activeChats: (activeChats as CountResult[])[0]?.active || 0,
+        avgResponseTime: (avgResponseTime as StatsResult[])[0]?.avg_response || 0,
+        avgRating: (avgRating as StatsResult[])[0]?.avg_rating || 0,
+        todayChats: (todayChats as CountResult[])[0]?.today || 0,
         resolvedChats: resolved,
-        avgDuration: (avgDuration as any)[0]?.avg_duration || 0,
+        avgDuration: (avgDuration as StatsResult[])[0]?.avg_duration || 0,
         resolutionRate: resolutionPercentage
       },
       dailyStats,

@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
           createdAt: true,
           opportunity: {
             select: {
-              value: true
+              estimatedValue: true
             }
           }
         }

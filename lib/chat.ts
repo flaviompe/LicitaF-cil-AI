@@ -7,6 +7,18 @@ export type MessageType = 'text' | 'image' | 'file' | 'system'
 export type ChatStatus = 'waiting' | 'active' | 'closed'
 export type ParticipantRole = 'user' | 'agent' | 'system'
 
+interface CountResult {
+  count: number
+}
+
+interface AvgTimeResult {
+  avg_time: number
+}
+
+interface AvgRatingResult {
+  avg_rating: number
+}
+
 export interface ChatMessage {
   id: string
   chatId: string
@@ -581,9 +593,9 @@ export class ChatService extends EventEmitter {
       ])
 
       return {
-        totalChats: (totalChats as any)[0]?.count || 0,
-        activeChats: (activeChats as any)[0]?.count || 0,
-        avgResponseTime: (avgResponseTime as any)[0]?.avg_time || 0
+        totalChats: (totalChats as CountResult[])[0]?.count || 0,
+        activeChats: (activeChats as CountResult[])[0]?.count || 0,
+        avgResponseTime: (avgResponseTime as AvgTimeResult[])[0]?.avg_time || 0
       }
     } catch (error) {
       console.error('Erro ao buscar estatísticas:', error)
@@ -604,9 +616,9 @@ export class ChatService extends EventEmitter {
       ])
 
       return {
-        totalChats: (totalChats as any)[0]?.count || 0,
-        activeChats: (activeChats as any)[0]?.count || 0,
-        avgRating: (avgRating as any)[0]?.avg_rating || 0
+        totalChats: (totalChats as CountResult[])[0]?.count || 0,
+        activeChats: (activeChats as CountResult[])[0]?.count || 0,
+        avgRating: (avgRating as AvgRatingResult[])[0]?.avg_rating || 0
       }
     } catch (error) {
       console.error('Erro ao buscar estatísticas do agente:', error)

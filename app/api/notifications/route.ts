@@ -32,12 +32,12 @@ const updateSettingsSchema = z.object({
     end: z.string()
   }).optional(),
   preferences: z.object({
-    opportunities: z.boolean().optional(),
-    certificates: z.boolean().optional(),
-    proposals: z.boolean().optional(),
-    payments: z.boolean().optional(),
-    system: z.boolean().optional(),
-    aiAnalysis: z.boolean().optional()
+    opportunities: z.boolean().default(true),
+    certificates: z.boolean().default(true),
+    proposals: z.boolean().default(true),
+    payments: z.boolean().default(true),
+    system: z.boolean().default(true),
+    aiAnalysis: z.boolean().default(true)
   }).optional()
 })
 
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const url = new URL(request.url)
     const limit = parseInt(url.searchParams.get('limit') || '20')
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     
@@ -184,7 +184,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const body = await request.json()
     const settings = updateSettingsSchema.parse(body)
@@ -220,7 +220,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string }
 
     const url = new URL(request.url)
     const notificationId = url.searchParams.get('id')

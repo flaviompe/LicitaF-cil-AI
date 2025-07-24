@@ -5,7 +5,7 @@ export interface NotificationData {
   id: string
   userId: string
   companyId?: string
-  type: 'opportunity' | 'certificate' | 'proposal' | 'payment' | 'system' | 'ai_analysis'
+  type: NotificationType
   title: string
   message: string
   priority: 'low' | 'medium' | 'high' | 'urgent'
@@ -22,10 +22,12 @@ export interface NotificationData {
 
 export type NotificationChannel = 'email' | 'whatsapp' | 'telegram' | 'push' | 'sms'
 
+export type NotificationType = 'opportunity' | 'certificate' | 'proposal' | 'payment' | 'system' | 'ai_analysis'
+
 export interface NotificationTemplate {
   id: string
   name: string
-  type: string
+  type: NotificationType
   channels: NotificationChannel[]
   template: {
     title: string
@@ -48,6 +50,27 @@ export interface NotificationSettings {
     end: string
   }
   preferences: {
+    opportunities: boolean
+    certificates: boolean
+    proposals: boolean
+    payments: boolean
+    system: boolean
+    aiAnalysis: boolean
+  }
+}
+
+interface NotificationSettingsCreateData {
+  userId: string
+  emailEnabled?: boolean
+  whatsappEnabled?: boolean
+  telegramEnabled?: boolean
+  pushEnabled?: boolean
+  smsEnabled?: boolean
+  quietHours?: {
+    start: string
+    end: string
+  }
+  preferences?: {
     opportunities: boolean
     certificates: boolean
     proposals: boolean
@@ -250,7 +273,7 @@ export class NotificationService extends EventEmitter {
     await this.sendNotification({
       userId,
       companyId: options.companyId,
-      type: template.type as any,
+      type: template.type,
       title,
       message,
       priority: options.priority || 'medium',
@@ -293,7 +316,7 @@ export class NotificationService extends EventEmitter {
   }
 
   private async deliverNotification(notification: NotificationData) {
-    const results: Record<NotificationChannel, boolean> = {} as any
+    const results: Partial<Record<NotificationChannel, boolean>> = {}
 
     for (const channel of notification.channels) {
       try {
@@ -572,7 +595,7 @@ export class NotificationService extends EventEmitter {
         create: {
           userId,
           ...settings
-        } as any
+        } as NotificationSettingsCreateData
       })
 
       this.emit('settingsUpdated', { userId, settings })

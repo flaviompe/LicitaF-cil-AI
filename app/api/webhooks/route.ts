@@ -5,6 +5,12 @@ import { db } from '@/lib/db'
 import { apiService, createWebhookSchema } from '@/lib/api-public'
 import { z } from 'zod'
 
+interface AuthenticatedUser {
+  id: string
+  name?: string | null
+  email?: string | null
+}
+
 // GET /api/webhooks - Listar webhooks do usuário
 export async function GET(request: Request) {
   try {
@@ -14,7 +20,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as AuthenticatedUser
     const webhooks = await apiService.getUserWebhooks(sessionUser.id)
     
     // Remover secret por segurança
@@ -43,7 +49,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as AuthenticatedUser
 
     const body = await request.json()
     const data = createWebhookSchema.parse(body)
@@ -162,7 +168,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as AuthenticatedUser
 
     const body = await request.json()
     const { id, ...updateData } = body
@@ -220,7 +226,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as AuthenticatedUser
 
     const url = new URL(request.url)
     const webhookId = url.searchParams.get('id')

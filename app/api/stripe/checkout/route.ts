@@ -5,6 +5,12 @@ import { db } from '@/lib/db'
 import { stripe, createCheckoutSession, createStripeCustomer, PLANS } from '@/lib/stripe'
 import { z } from 'zod'
 
+interface AuthenticatedUser {
+  id: string
+  name?: string | null
+  email?: string | null
+}
+
 const checkoutSchema = z.object({
   planId: z.enum(['STARTER', 'PROFESSIONAL', 'ENTERPRISE']),
   interval: z.enum(['month', 'year']).default('month'),
@@ -18,7 +24,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as AuthenticatedUser
 
     const body = await request.json()
     const { planId, interval } = checkoutSchema.parse(body)

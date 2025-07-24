@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Only admin users can create templates
-    if ((session.user as any).role !== 'ADMIN') {
+    if ((session.user as { role: string }).role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -125,7 +125,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Only admin users can update templates
-    if ((session.user as any).role !== 'ADMIN') {
+    if ((session.user as { role: string }).role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -197,7 +197,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Only admin users can delete templates
-    if ((session.user as any).role !== 'ADMIN') {
+    if ((session.user as { role: string }).role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }

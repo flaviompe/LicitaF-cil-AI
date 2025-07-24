@@ -46,7 +46,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string; email: string; name?: string }
     
     const supplierId = params.id
     const supplier = await marketplaceService.getSupplierById(supplierId)
@@ -101,7 +101,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string; email: string; name?: string }
     
     const supplierId = params.id
     const supplier = await marketplaceService.getSupplierById(supplierId)

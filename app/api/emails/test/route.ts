@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Only admin users can test email configuration
-    if ((session.user as any).role !== 'ADMIN') {
+    if ((session.user as { role: string }).role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -196,7 +196,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Only admin users can view email configuration
-    if ((session.user as any).role !== 'ADMIN') {
+    if ((session.user as { role: string }).role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }

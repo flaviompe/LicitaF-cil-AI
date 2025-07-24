@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
         const today = new Date()
         
-        const filters: any = {}
+        const filters: Record<string, string> = {}
         if (templateId) filters.templateId = templateId
         if (campaignId) filters.campaignId = campaignId
         if (userId) filters.userId = userId
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
           )
         }
 
-        const customFilters: any = {}
+        const customFilters: Record<string, string> = {}
         if (templateId) customFilters.templateId = templateId
         if (campaignId) customFilters.campaignId = campaignId
         if (userId) customFilters.userId = userId
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest) {
 
       case 'campaigns':
         // Campaign list with basic metrics
-        const sessionUser = session.user as any
+        const sessionUser = session.user as { id: string; role: string; email: string }
         const campaigns = await analyticsService.getAllCampaigns({
           createdBy: sessionUser.role === 'ADMIN' ? undefined : sessionUser.id
         })
@@ -157,7 +157,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Only admin users can create campaigns
-    if ((session.user as any).role !== 'ADMIN') {
+    if ((session.user as { role: string }).role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Forbidden' },
         { status: 403 }
@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
           )
         }
 
-        const sessionUser = session.user as any
+        const sessionUser = session.user as { id: string; role: string; email: string }
         const campaignId = await analyticsService.createCampaign({
           name,
           description,

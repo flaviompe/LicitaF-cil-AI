@@ -96,7 +96,7 @@ export async function GET(request: Request) {
     const searchParams = Object.fromEntries(url.searchParams)
     
     // Converter arrays de string para arrays
-    const params: any = { ...searchParams }
+    const params: Record<string, string | string[] | number | boolean> = { ...searchParams }
     if (searchParams.categories) {
       params.categories = searchParams.categories.split(',')
     }
@@ -166,7 +166,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string; email: string; name?: string }
     
     const body = await request.json()
     const validatedData = supplierSchema.parse(body)
@@ -190,7 +190,7 @@ export async function POST(request: Request) {
     }
     
     // Processar documentos com propriedades necessárias
-    const processedDocuments = (validatedData.documents || []).map((doc: any) => ({
+    const processedDocuments = (validatedData.documents || []).map((doc: { type: string; name: string; url: string }) => ({
       id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       type: doc.type || 'other',
       name: doc.name,

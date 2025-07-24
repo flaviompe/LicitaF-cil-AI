@@ -26,7 +26,7 @@ export default async function AdminChatPage() {
     redirect('/login')
   }
 
-  const userSession = session.user as any
+  const userSession = session.user as { id: string; email: string; name?: string }
   const user = await db.user.findUnique({
     where: { id: userSession.id }
   })
@@ -107,15 +107,15 @@ export default async function AdminChatPage() {
     resolutionResult
   ] = chatStats
 
-  const waiting = (waitingResult as any)[0]?.waiting || 0
-  const active = (activeResult as any)[0]?.active || 0
-  const today = (todayResult as any)[0]?.today || 0
-  const closedToday = (closedTodayResult as any)[0]?.closed_today || 0
-  const avgWait = (avgWaitResult as any)[0]?.avg_wait || 0
-  const avgRating = (avgRatingResult as any)[0]?.avg_rating || 0
-  const ratedCount = (avgRatingResult as any)[0]?.rated_count || 0
-  const activeAgents = (activeAgentsResult as any)[0]?.active_agents || 0
-  const resolutionData = (resolutionResult as any)[0]
+  const waiting = (waitingResult as { waiting: number }[])[0]?.waiting || 0
+  const active = (activeResult as { active: number }[])[0]?.active || 0
+  const today = (todayResult as { today: number }[])[0]?.today || 0
+  const closedToday = (closedTodayResult as { closed_today: number }[])[0]?.closed_today || 0
+  const avgWait = (avgWaitResult as { avg_wait: number }[])[0]?.avg_wait || 0
+  const avgRating = (avgRatingResult as { avg_rating: number; rated_count: number }[])[0]?.avg_rating || 0
+  const ratedCount = (avgRatingResult as { avg_rating: number; rated_count: number }[])[0]?.rated_count || 0
+  const activeAgents = (activeAgentsResult as { active_agents: number }[])[0]?.active_agents || 0
+  const resolutionData = (resolutionResult as { total: number; resolved: number }[])[0]
   const resolutionRate = resolutionData?.total > 0 ? 
     (resolutionData.resolved / resolutionData.total) * 100 : 0
 
@@ -338,7 +338,7 @@ export default async function AdminChatPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {(departmentStats as any).map((dept: any) => (
+              {(departmentStats as { department: string; total: number; waiting: number; active: number; closed: number; avg_rating?: number }[]).map((dept) => (
                 <div key={dept.department} className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <div className="font-medium">{dept.department}</div>
@@ -375,7 +375,7 @@ export default async function AdminChatPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {(topAgents as any).map((agent: any, index: number) => (
+              {(topAgents as { agent_name: string; total_chats: number; avg_rating?: number; avg_duration?: number; resolved: number }[]).map((agent, index: number) => (
                 <div key={agent.agent_name} className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -402,7 +402,7 @@ export default async function AdminChatPage() {
                 </div>
               ))}
               
-              {!(topAgents as any).length && (
+              {!topAgents.length && (
                 <div className="text-center py-8 text-gray-500">
                   <Users className="h-12 w-12 mx-auto mb-2 text-gray-300" />
                   <p>Nenhum agente encontrado</p>

@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
-import { Analytics } from '@/lib/analytics'
+import { Analytics, BusinessMetrics } from '@/lib/analytics'
 import { AnalyticsOverview } from '@/components/admin/analytics-overview'
 import { UserMetrics } from '@/components/admin/user-metrics'
 import { RevenueMetrics } from '@/components/admin/revenue-metrics'
@@ -21,7 +21,7 @@ export default async function AdminAnalyticsPage() {
   }
 
   // Verificar se é admin (você pode implementar verificação de role)
-  const user = session.user as any
+  const user = session.user as { role: string; id: string; email: string }
   const isAdmin = user.role === 'ADMIN'
   
   if (!isAdmin) {
@@ -128,19 +128,19 @@ export default async function AdminAnalyticsPage() {
         </TabsContent>
 
         <TabsContent value="users" className="mt-6">
-          <UserMetrics metrics={metrics as any} />
+          <UserMetrics metrics={metrics} />
         </TabsContent>
 
         <TabsContent value="revenue" className="mt-6">
-          <RevenueMetrics metrics={metrics as any} />
+          <RevenueMetrics metrics={metrics} />
         </TabsContent>
 
         <TabsContent value="opportunities" className="mt-6">
-          <OpportunityMetrics metrics={metrics as any} />
+          <OpportunityMetrics metrics={metrics} />
         </TabsContent>
 
         <TabsContent value="proposals" className="mt-6">
-          <ProposalMetrics metrics={metrics as any} />
+          <ProposalMetrics metrics={metrics} />
         </TabsContent>
       </Tabs>
     </div>

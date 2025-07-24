@@ -12,7 +12,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string; email: string; name?: string }
     const supplier = await marketplaceService.getSupplierByUserId(sessionUser.id)
     
     if (!supplier) {
@@ -41,7 +41,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const sessionUser = session.user as any
+    const sessionUser = session.user as { id: string; email: string; name?: string }
     const supplier = await marketplaceService.getSupplierByUserId(sessionUser.id)
     
     if (!supplier) {

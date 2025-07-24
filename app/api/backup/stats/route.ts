@@ -42,10 +42,10 @@ export async function GET(request: Request) {
       Promise.resolve([] as { status: string }[]),
       
       // Último backup
-      Promise.resolve(null),
+      Promise.resolve(null as { completedAt: Date } | null),
       
       // Próximo backup agendado
-      Promise.resolve(null)
+      Promise.resolve(null as { schedule: string } | null)
     ])
 
     const [totalBackups, totalSizeResult, jobs, lastBackup, nextConfig] = userStats

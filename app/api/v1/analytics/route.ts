@@ -141,9 +141,9 @@ export async function GET(request: NextRequest) {
       proposals: {
         total: proposals.length,
         submitted: proposals.filter(p => p.status === 'SUBMITTED').length,
-        won: proposals.filter(p => p.status === 'WON').length,
-        lost: proposals.filter(p => p.status === 'LOST').length,
-        pending: proposals.filter(p => p.status === 'DRAFT').length
+        won: proposals.filter(p => p.status === 'ACCEPTED').length,
+        lost: proposals.filter(p => p.status === 'REJECTED').length,
+        pending: proposals.filter(p => p.status === 'PENDING').length
       },
       certificates: {
         total: certificates.length,

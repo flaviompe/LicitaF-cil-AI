@@ -157,7 +157,7 @@ export async function GET(request: NextRequest) {
       },
       performance: {
         successRate: winRate.length > 0 
-          ? (winRate.filter(p => p.status === 'WON').length / winRate.length) * 100
+          ? (winRate.filter(p => p.status === 'completed').length / winRate.length) * 100
           : 0,
         conversionRate: opportunities.length > 0 
           ? (proposals.length / opportunities.length) * 100

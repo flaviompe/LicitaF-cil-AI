@@ -148,7 +148,7 @@ export default async function AdminChatPage() {
     GROUP BY s.agent_id, u.name
     ORDER BY total_chats DESC
     LIMIT 5
-  `
+  ` as { agent_name: string; total_chats: number; avg_rating?: number; avg_duration?: number; resolved: number }[]
 
   return (
     <div className="space-y-6">
@@ -375,7 +375,7 @@ export default async function AdminChatPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {(topAgents as { agent_name: string; total_chats: number; avg_rating?: number; avg_duration?: number; resolved: number }[]).map((agent, index: number) => (
+              {topAgents.map((agent, index: number) => (
                 <div key={agent.agent_name} className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">

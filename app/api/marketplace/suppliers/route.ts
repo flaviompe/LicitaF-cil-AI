@@ -104,7 +104,7 @@ export async function GET(request: Request) {
       params.states = searchParams.states.split(',')
     }
     
-    // Converter valores numéricos
+    // Converter valores numéricos com verificação de tipo
     if (params.minRating && typeof params.minRating === 'string') {
       params.minRating = parseFloat(params.minRating)
     }

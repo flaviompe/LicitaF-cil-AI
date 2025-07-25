@@ -14,6 +14,37 @@ export interface BusinessMetrics {
   newUsersThisMonth: number
   userRetentionRate: number
   totalOpportunities: number
+  activeOpportunities: number
+  newOpportunitiesThisMonth: number
+  opportunitiesGrowth: number
+  averageOpportunityValue: number
+  opportunitiesByCategory: Array<{
+    category: string
+    count: number
+    percentage: number
+    averageValue: number
+  }>
+  opportunitiesByRegion: Array<{
+    region: string
+    count: number
+    percentage: number
+  }>
+  opportunityTrends: Array<{
+    month: string
+    count: number
+    value: number
+    growth: number
+  }>
+  topOpportunities: Array<{
+    id: string
+    title: string
+    value: number
+    category: string
+    region: string
+    deadline: string
+    viewCount: number
+  }>
+  
   totalProposals: number
   successRate: number
   averageProposalValue: number
@@ -246,6 +277,16 @@ export class Analytics {
       const monthlyRevenueHistory = await this.getMonthlyRevenueHistory()
       const churnRate = await this.getChurnRate()
 
+      // Métricas de oportunidades avançadas
+      const opportunitiesByCategory = await this.getOpportunitiesByCategory()
+      const opportunitiesByRegion = await this.getOpportunitiesByRegion()
+      const opportunityTrends = await this.getOpportunityTrends()
+      const topOpportunities = await this.getTopOpportunities()
+      const activeOpportunities = await this.getActiveOpportunities()
+      const newOpportunitiesThisMonth = await this.getNewOpportunitiesThisMonth()
+      const opportunitiesGrowth = await this.getOpportunitiesGrowth()
+      const averageOpportunityValue = await this.getAverageOpportunityValue()
+
       // Métricas de receita
       const revenueThisMonth = paymentsThisMonth._sum.amount || 0
       const revenueLastMonth = paymentsLastMonth._sum.amount || 0
@@ -277,6 +318,14 @@ export class Analytics {
         newUsersThisMonth,
         userRetentionRate,
         totalOpportunities,
+        activeOpportunities,
+        newOpportunitiesThisMonth,
+        opportunitiesGrowth,
+        averageOpportunityValue,
+        opportunitiesByCategory,
+        opportunitiesByRegion,
+        opportunityTrends,
+        topOpportunities,
         totalProposals,
         successRate,
         averageProposalValue: proposalValues._avg.proposedValue || 0,
@@ -440,6 +489,139 @@ export class Analytics {
   private static async getChurnRate() {
     // Simulação de taxa de churn (cancelamentos)
     return Math.random() * 5 + 2 // Entre 2% e 7%
+  }
+
+  private static async getOpportunitiesByCategory() {
+    const opportunities = await db.opportunity.groupBy({
+      by: ['bidType'],
+      _count: { bidType: true },
+      _avg: { estimatedValue: true }
+    })
+
+    const total = opportunities.reduce((sum, item) => sum + item._count.bidType, 0)
+    
+    return opportunities.map(item => ({
+      category: item.bidType || 'Outros',
+      count: item._count.bidType,
+      percentage: total > 0 ? (item._count.bidType / total) * 100 : 0,
+      averageValue: item._avg.estimatedValue || 0
+    }))
+  }
+
+  private static async getOpportunitiesByRegion() {
+    // Simulação de oportunidades por região
+    const regions = [
+      { region: 'São Paulo', count: 45, percentage: 35 },
+      { region: 'Rio de Janeiro', count: 28, percentage: 22 },
+      { region: 'Minas Gerais', count: 20, percentage: 16 },
+      { region: 'Paraná', count: 15, percentage: 12 },
+      { region: 'Outros', count: 19, percentage: 15 }
+    ]
+    return regions
+  }
+
+  private static async getOpportunityTrends() {
+    // Simulação de tendências de oportunidades
+    const trends = []
+    const now = new Date()
+    
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
+      const monthName = date.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })
+      const count = Math.floor(Math.random() * 50) + 20
+      const value = Math.floor(Math.random() * 2000000) + 1000000
+      const growth = (Math.random() - 0.5) * 30
+      
+      trends.push({
+        month: monthName,
+        count,
+        value,
+        growth
+      })
+    }
+    
+    return trends
+  }
+
+  private static async getTopOpportunities() {
+    const opportunities = await db.opportunity.findMany({
+      orderBy: { estimatedValue: 'desc' },
+      take: 10,
+      select: {
+        id: true,
+        title: true,
+        estimatedValue: true,
+        bidType: true,
+        entity_state: true,
+        deadline: true
+      }
+    })
+
+    return opportunities.map((opp, index) => ({
+      id: opp.id,
+      title: opp.title,
+      value: opp.estimatedValue || 0,
+      category: opp.bidType || 'Outros',
+      region: opp.entity_state || 'Não informado',
+      deadline: opp.deadline?.toISOString() || new Date().toISOString(),
+      viewCount: Math.floor(Math.random() * 1000) + 100
+    }))
+  }
+
+  private static async getActiveOpportunities() {
+    return await db.opportunity.count({
+      where: {
+        deadline: {
+          gte: new Date()
+        }
+      }
+    })
+  }
+
+  private static async getNewOpportunitiesThisMonth() {
+    const monthStart = new Date()
+    monthStart.setDate(1)
+    monthStart.setHours(0, 0, 0, 0)
+
+    return await db.opportunity.count({
+      where: {
+        createdAt: {
+          gte: monthStart
+        }
+      }
+    })
+  }
+
+  private static async getOpportunitiesGrowth() {
+    const thisMonth = await this.getNewOpportunitiesThisMonth()
+    
+    const lastMonthStart = new Date()
+    lastMonthStart.setMonth(lastMonthStart.getMonth() - 1)
+    lastMonthStart.setDate(1)
+    lastMonthStart.setHours(0, 0, 0, 0)
+    
+    const lastMonthEnd = new Date()
+    lastMonthEnd.setDate(0)
+    lastMonthEnd.setHours(23, 59, 59, 999)
+
+    const lastMonth = await db.opportunity.count({
+      where: {
+        createdAt: {
+          gte: lastMonthStart,
+          lte: lastMonthEnd
+        }
+      }
+    })
+
+    return lastMonth > 0 ? ((thisMonth - lastMonth) / lastMonth) * 100 : 0
+  }
+
+  private static async getAverageOpportunityValue() {
+    const result = await db.opportunity.aggregate({
+      _avg: { estimatedValue: true }
+    })
+    
+    return result._avg.estimatedValue || 0
   }
 
   private static async getTopPerformingUsers() {

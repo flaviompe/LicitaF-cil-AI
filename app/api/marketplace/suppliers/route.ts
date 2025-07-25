@@ -105,24 +105,24 @@ export async function GET(request: Request) {
     }
     
     // Converter valores numéricos
-    if (params.minRating) {
+    if (params.minRating && typeof params.minRating === 'string') {
       params.minRating = parseFloat(params.minRating)
     }
-    if (params.maxPrice) {
+    if (params.maxPrice && typeof params.maxPrice === 'string') {
       params.maxPrice = parseFloat(params.maxPrice)
     }
-    if (params.page) {
+    if (params.page && typeof params.page === 'string') {
       params.page = parseInt(params.page)
     }
-    if (params.limit) {
+    if (params.limit && typeof params.limit === 'string') {
       params.limit = parseInt(params.limit)
     }
     
     // Converter valores booleanos
-    if (params.verified) {
+    if (params.verified && typeof params.verified === 'string') {
       params.verified = params.verified === 'true'
     }
-    if (params.featured) {
+    if (params.featured && typeof params.featured === 'string') {
       params.featured = params.featured === 'true'
     }
     

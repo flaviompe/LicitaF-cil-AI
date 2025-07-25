@@ -46,6 +46,39 @@ export interface BusinessMetrics {
   }>
   
   totalProposals: number
+  successfulProposals: number
+  pendingProposals: number
+  rejectedProposals: number
+  averageSuccessRate: number
+  totalValueProposed: number
+  totalValueWon: number
+  proposalsByStatus: Array<{
+    status: string
+    count: number
+    percentage: number
+  }>
+  proposalsByCategory: Array<{
+    category: string
+    count: number
+    successRate: number
+    totalValue: number
+  }>
+  monthlyProposalTrends: Array<{
+    month: string
+    submitted: number
+    won: number
+    successRate: number
+    value: number
+  }>
+  topPerformingProposals: Array<{
+    id: string
+    title: string
+    value: number
+    category: string
+    status: 'WON' | 'PENDING' | 'REJECTED'
+    submittedDate: string
+    userName: string
+  }>
   successRate: number
   averageProposalValue: number
   
@@ -287,6 +320,18 @@ export class Analytics {
       const opportunitiesGrowth = await this.getOpportunitiesGrowth()
       const averageOpportunityValue = await this.getAverageOpportunityValue()
 
+      // Métricas de propostas avançadas
+      const successfulProposals = await this.getSuccessfulProposals()
+      const pendingProposals = await this.getPendingProposals()
+      const rejectedProposals = await this.getRejectedProposals()
+      const averageSuccessRate = await this.getAverageSuccessRate()
+      const totalValueProposed = await this.getTotalValueProposed()
+      const totalValueWon = await this.getTotalValueWon()
+      const proposalsByStatusDetailed = await this.getProposalsByStatusDetailed()
+      const proposalsByCategory = await this.getProposalsByCategory()
+      const monthlyProposalTrends = await this.getMonthlyProposalTrends()
+      const topPerformingProposals = await this.getTopPerformingProposals()
+
       // Métricas de receita
       const revenueThisMonth = paymentsThisMonth._sum.amount || 0
       const revenueLastMonth = paymentsLastMonth._sum.amount || 0
@@ -327,6 +372,16 @@ export class Analytics {
         opportunityTrends,
         topOpportunities,
         totalProposals,
+        successfulProposals,
+        pendingProposals,
+        rejectedProposals,
+        averageSuccessRate,
+        totalValueProposed,
+        totalValueWon,
+        proposalsByStatus: proposalsByStatusDetailed,
+        proposalsByCategory,
+        monthlyProposalTrends,
+        topPerformingProposals,
         successRate,
         averageProposalValue: proposalValues._avg.proposedValue || 0,
         
@@ -622,6 +677,173 @@ export class Analytics {
     })
     
     return result._avg.estimatedValue || 0
+  }
+
+  private static async getSuccessfulProposals() {
+    return await db.proposal.count({
+      where: { status: 'ACCEPTED' }
+    })
+  }
+
+  private static async getPendingProposals() {
+    return await db.proposal.count({
+      where: { status: 'PENDING' }
+    })
+  }
+
+  private static async getRejectedProposals() {
+    return await db.proposal.count({
+      where: { status: 'REJECTED' }
+    })
+  }
+
+  private static async getAverageSuccessRate() {
+    const total = await db.proposal.count()
+    const successful = await this.getSuccessfulProposals()
+    
+    return total > 0 ? (successful / total) * 100 : 0
+  }
+
+  private static async getTotalValueProposed() {
+    const result = await db.proposal.aggregate({
+      _sum: { proposedValue: true }
+    })
+    
+    return result._sum.proposedValue || 0
+  }
+
+  private static async getTotalValueWon() {
+    const result = await db.proposal.aggregate({
+      where: { status: 'ACCEPTED' },
+      _sum: { proposedValue: true }
+    })
+    
+    return result._sum.proposedValue || 0
+  }
+
+  private static async getProposalsByStatusDetailed() {
+    const statusCounts = await db.proposal.groupBy({
+      by: ['status'],
+      _count: { status: true }
+    })
+
+    const total = statusCounts.reduce((sum, item) => sum + item._count.status, 0)
+    
+    return statusCounts.map(item => ({
+      status: item.status,
+      count: item._count.status,
+      percentage: total > 0 ? (item._count.status / total) * 100 : 0
+    }))
+  }
+
+  private static async getProposalsByCategory() {
+    const proposals = await db.proposal.findMany({
+      include: {
+        opportunity: {
+          select: { bidType: true }
+        }
+      }
+    })
+
+    const categoryStats: Record<string, { count: number; successful: number; totalValue: number }> = {}
+
+    proposals.forEach(proposal => {
+      const category = proposal.opportunity?.bidType || 'Outros'
+      if (!categoryStats[category]) {
+        categoryStats[category] = { count: 0, successful: 0, totalValue: 0 }
+      }
+      
+      categoryStats[category].count++
+      categoryStats[category].totalValue += proposal.proposedValue
+      
+      if (proposal.status === 'ACCEPTED') {
+        categoryStats[category].successful++
+      }
+    })
+
+    return Object.entries(categoryStats).map(([category, stats]) => ({
+      category,
+      count: stats.count,
+      successRate: stats.count > 0 ? (stats.successful / stats.count) * 100 : 0,
+      totalValue: stats.totalValue
+    }))
+  }
+
+  private static async getMonthlyProposalTrends() {
+    const trends = []
+    const now = new Date()
+    
+    for (let i = 5; i >= 0; i--) {
+      const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1)
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0)
+      const monthName = monthStart.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })
+      
+      const [submitted, won, valueData] = await Promise.all([
+        db.proposal.count({
+          where: {
+            createdAt: {
+              gte: monthStart,
+              lte: monthEnd
+            }
+          }
+        }),
+        db.proposal.count({
+          where: {
+            createdAt: {
+              gte: monthStart,
+              lte: monthEnd
+            },
+            status: 'ACCEPTED'
+          }
+        }),
+        db.proposal.aggregate({
+          where: {
+            createdAt: {
+              gte: monthStart,
+              lte: monthEnd
+            },
+            status: 'ACCEPTED'
+          },
+          _sum: { proposedValue: true }
+        })
+      ])
+      
+      trends.push({
+        month: monthName,
+        submitted,
+        won,
+        successRate: submitted > 0 ? (won / submitted) * 100 : 0,
+        value: valueData._sum.proposedValue || 0
+      })
+    }
+    
+    return trends
+  }
+
+  private static async getTopPerformingProposals() {
+    const proposals = await db.proposal.findMany({
+      orderBy: { proposedValue: 'desc' },
+      take: 10,
+      include: {
+        user: {
+          select: { name: true }
+        },
+        opportunity: {
+          select: { title: true, bidType: true }
+        }
+      }
+    })
+
+    return proposals.map(proposal => ({
+      id: proposal.id,
+      title: proposal.opportunity?.title || 'Proposta sem título',
+      value: proposal.proposedValue,
+      category: proposal.opportunity?.bidType || 'Outros',
+      status: proposal.status === 'ACCEPTED' ? 'WON' as const :
+              proposal.status === 'PENDING' ? 'PENDING' as const : 'REJECTED' as const,
+      submittedDate: proposal.createdAt.toISOString(),
+      userName: proposal.user?.name || 'Usuário desconhecido'
+    }))
   }
 
   private static async getTopPerformingUsers() {

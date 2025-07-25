@@ -192,7 +192,7 @@ export async function POST(request: Request) {
     // Processar documentos com propriedades necessárias
     const processedDocuments = (validatedData.documents || []).map((doc: { type: string; name: string; url: string }) => ({
       id: `doc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      type: doc.type || 'other',
+      type: (['cnpj', 'license', 'certification', 'portfolio', 'other'].includes(doc.type) ? doc.type : 'other') as 'cnpj' | 'license' | 'certification' | 'portfolio' | 'other',
       name: doc.name,
       url: doc.url,
       uploadedAt: new Date(),

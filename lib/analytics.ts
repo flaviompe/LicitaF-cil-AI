@@ -17,6 +17,26 @@ export interface BusinessMetrics {
   totalProposals: number
   successRate: number
   averageProposalValue: number
+  
+  // Revenue metrics for RevenueMetrics component
+  totalRevenue: number
+  monthlyRevenue: number
+  revenueGrowth: number
+  averageRevenuePerUser: number
+  subscriptionRevenue: number
+  oneTimeRevenue: number
+  churnRate: number
+  revenueByPlan: Array<{
+    plan: string
+    revenue: number
+    percentage: number
+  }>
+  monthlyRevenueHistory: Array<{
+    month: string
+    revenue: number
+    growth: number
+  }>
+  
   topPerformingUsers: Array<{
     userId: string
     userName: string
@@ -221,6 +241,11 @@ export class Analytics {
       // Usuários por plano
       const usersByPlan = await this.getUsersByPlan()
 
+      // Métricas de receita avançadas
+      const revenueByPlan = await this.getRevenueByPlan()
+      const monthlyRevenueHistory = await this.getMonthlyRevenueHistory()
+      const churnRate = await this.getChurnRate()
+
       // Métricas de receita
       const revenueThisMonth = paymentsThisMonth._sum.amount || 0
       const revenueLastMonth = paymentsLastMonth._sum.amount || 0
@@ -240,6 +265,10 @@ export class Analytics {
       
       // Implementação temporária
       const totalRevenue = { _sum: { amount: 0 } }
+      const totalRevenueAmount = totalRevenue._sum.amount || 0
+      const subscriptionRevenue = totalRevenueAmount * 0.8 // 80% assinaturas
+      const oneTimeRevenue = totalRevenueAmount * 0.2 // 20% vendas únicas
+      const averageRevenuePerUser = totalUsers > 0 ? totalRevenueAmount / totalUsers : 0
 
       return {
         totalUsers,
@@ -251,6 +280,18 @@ export class Analytics {
         totalProposals,
         successRate,
         averageProposalValue: proposalValues._avg.proposedValue || 0,
+        
+        // Revenue metrics for RevenueMetrics component
+        totalRevenue: totalRevenueAmount,
+        monthlyRevenue: revenueThisMonth,
+        revenueGrowth,
+        averageRevenuePerUser,
+        subscriptionRevenue,
+        oneTimeRevenue,
+        churnRate,
+        revenueByPlan,
+        monthlyRevenueHistory,
+        
         topPerformingUsers,
         opportunitiesByType: opportunitiesByType.reduce((acc, item) => {
           acc[item.bidType] = item._count.bidType
@@ -263,7 +304,7 @@ export class Analytics {
         userGrowth,
         usersByPlan,
         revenue: {
-          total: totalRevenue._sum.amount || 0,
+          total: totalRevenueAmount,
           thisMonth: revenueThisMonth,
           lastMonth: revenueLastMonth,
           growth: revenueGrowth,
@@ -352,6 +393,53 @@ export class Analytics {
         percentage: 5
       }
     ]
+  }
+
+  private static async getRevenueByPlan() {
+    // Simulação de receita por plano
+    return [
+      {
+        plan: 'FREE',
+        revenue: 0,
+        percentage: 0
+      },
+      {
+        plan: 'PRO',
+        revenue: 25000,
+        percentage: 75
+      },
+      {
+        plan: 'ENTERPRISE',
+        revenue: 8333,
+        percentage: 25
+      }
+    ]
+  }
+
+  private static async getMonthlyRevenueHistory() {
+    // Simulação de histórico de receita mensal
+    const months = []
+    const now = new Date()
+    
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
+      const monthName = date.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })
+      const baseRevenue = 30000 + (Math.random() * 10000)
+      const growth = (Math.random() - 0.5) * 20 // -10% a +10%
+      
+      months.push({
+        month: monthName,
+        revenue: Math.round(baseRevenue),
+        growth: Math.round(growth * 10) / 10
+      })
+    }
+    
+    return months
+  }
+
+  private static async getChurnRate() {
+    // Simulação de taxa de churn (cancelamentos)
+    return Math.random() * 5 + 2 // Entre 2% e 7%
   }
 
   private static async getTopPerformingUsers() {

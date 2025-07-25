@@ -160,7 +160,7 @@ export class Analytics {
         newUsersThisMonth,
         totalOpportunities,
         totalProposals,
-        successfulProposals,
+        successfulProposalsBasic,
         proposalValues,
         opportunitiesByType,
         proposalsByStatus,
@@ -291,7 +291,7 @@ export class Analytics {
       ])
 
       // Calcular taxa de sucesso
-      const successRate = totalProposals > 0 ? (successfulProposals / totalProposals) * 100 : 0
+      const successRate = totalProposals > 0 ? (successfulProposalsBasic / totalProposals) * 100 : 0
 
       // Processar crescimento de usuários
       const userGrowth = this.processUserGrowthMonthly(userGrowthData)

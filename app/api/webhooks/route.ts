@@ -155,110 +155,18 @@ export async function POST(request: Request) {
 
 // PUT /api/webhooks - Atualizar webhook
 export async function PUT(request: Request) {
-  try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    }
-
-    const sessionUser = session.user as AuthenticatedUser
-
-    const body = await request.json()
-    const { id, ...updateData } = body
-    
-    if (!id) {
-      return NextResponse.json(
-        { error: 'ID do webhook é obrigatório' },
-        { status: 400 }
-      )
-    }
-
-    // Verificar se o webhook pertence ao usuário
-    const existingWebhook = await db.webhook.findFirst({
-      where: {
-        id,
-        userId: sessionUser.id
-      }
-    })
-    
-    if (!existingWebhook) {
-      return NextResponse.json(
-        { error: 'Webhook não encontrado' },
-        { status: 404 }
-      )
-    }
-
-    // Atualizar webhook
-    const updatedWebhook = await db.webhook.update({
-      where: { id },
-      data: updateData
-    })
-
-    return NextResponse.json({
-      webhook: {
-        ...updatedWebhook,
-        secret: updatedWebhook.secret.substring(0, 8) + '...'
-      }
-    })
-
-  } catch (error) {
-    console.error('Erro ao atualizar webhook:', error)
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
-  }
+  // TODO: Implementar após adicionar modelo Webhook ao schema Prisma
+  return NextResponse.json(
+    { error: 'Funcionalidade não implementada - modelo Webhook não existe no schema' },
+    { status: 501 }
+  )
 }
 
 // DELETE /api/webhooks - Deletar webhook
 export async function DELETE(request: Request) {
-  try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
-    }
-
-    const sessionUser = session.user as AuthenticatedUser
-
-    const url = new URL(request.url)
-    const webhookId = url.searchParams.get('id')
-    
-    if (!webhookId) {
-      return NextResponse.json(
-        { error: 'ID do webhook é obrigatório' },
-        { status: 400 }
-      )
-    }
-
-    // Verificar se o webhook pertence ao usuário
-    const existingWebhook = await db.webhook.findFirst({
-      where: {
-        id: webhookId,
-        userId: sessionUser.id
-      }
-    })
-    
-    if (!existingWebhook) {
-      return NextResponse.json(
-        { error: 'Webhook não encontrado' },
-        { status: 404 }
-      )
-    }
-
-    // Deletar webhook
-    await db.webhook.delete({
-      where: { id: webhookId }
-    })
-
-    return NextResponse.json({ success: true })
-
-  } catch (error) {
-    console.error('Erro ao deletar webhook:', error)
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
-  }
+  // TODO: Implementar após adicionar modelo Webhook ao schema Prisma
+  return NextResponse.json(
+    { error: 'Funcionalidade não implementada - modelo Webhook não existe no schema' },
+    { status: 501 }
+  )
 }

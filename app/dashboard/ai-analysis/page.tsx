@@ -42,7 +42,7 @@ export default async function AIAnalysisPage() {
   }
 
   // TODO: Implementar lógica real de planos quando o modelo subscription for criado
-  const currentPlan = 'Professional' // Mock temporário
+  const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional' // Mock temporário
   const analysisHistory = await AIAnalysisService.getAnalysisHistory(session.user.id)
 
   // TODO: Implementar após criar modelo editalAnalysis no schema

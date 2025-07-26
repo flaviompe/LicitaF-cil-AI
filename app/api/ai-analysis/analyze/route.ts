@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
     }
 
-    const currentPlan = 'Pro' // Temporariamente definir como Pro
+    const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional' // Temporariamente definir como Professional
 
     // Verificar limite de uso (usando Proposal como proxy)
     const monthlyUsage = await db.proposal.count({

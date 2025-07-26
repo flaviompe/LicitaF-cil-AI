@@ -36,7 +36,7 @@ export async function GET(request: Request) {
       where: { id: sessionUser.id }
     })
 
-    const currentPlan = 'Pro' // Temporariamente definir como Pro
+    const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional' // Temporariamente definir como Professional
     
     // Todos os planos têm acesso a backup básico
     // const configs = await db.backupConfig.findMany({
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
       where: { id: sessionUser.id }
     })
 
-    const currentPlan = 'Pro' // Temporariamente definir como Pro
+    const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional' // Temporariamente definir como Professional
     
     const planLimits = {
       'Starter': { maxConfigs: 1, maxRetention: 7, destinations: ['local'] },

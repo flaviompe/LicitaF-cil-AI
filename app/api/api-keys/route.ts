@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const currentPlan = 'Pro' // Temporariamente definir como Pro
+    const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional' // Temporariamente definir como Professional
     
     // Verificar limites do plano
     const existingKeys = await apiService.getUserApiKeys(sessionUser.id)

@@ -58,12 +58,7 @@ export async function POST(request: Request) {
     const user = await db.user.findUnique({
       where: { id: sessionUser.id },
       include: { 
-        company: true,
-        subscriptions: {
-          include: { plan: true },
-          take: 1,
-          orderBy: { createdAt: 'desc' }
-        }
+        company: true
       }
     })
     

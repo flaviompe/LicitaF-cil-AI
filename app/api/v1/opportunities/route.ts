@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
           publishDate: true,
           openingDate: true,
           bidType: true,
-          value: true,
+          estimatedValue: true,
           status: true,
           category: true,
           tags: true,

@@ -39,11 +39,11 @@ export async function GET(request: NextRequest) {
   try {
     // Autenticar e verificar permissões
     const auth = await apiService.authenticate(request, ['opportunities:read'])
-    if (!auth.success) {
+    if ('error' in auth) {
       return auth as NextResponse
     }
-
-    const { apiKey, rateLimit } = auth
+    
+    const { apiKey, rateLimit } = auth as { success: boolean; apiKey: any; rateLimit: any }
     const url = new URL(request.url)
     const params = Object.fromEntries(url.searchParams)
     
@@ -187,11 +187,11 @@ export async function POST(request: NextRequest) {
   try {
     // Autenticar e verificar permissões
     const auth = await apiService.authenticate(request, ['opportunities:write'])
-    if (!auth.success) {
+    if ('error' in auth) {
       return auth as NextResponse
     }
-
-    const { apiKey, rateLimit } = auth
+    
+    const { apiKey, rateLimit } = auth as { success: boolean; apiKey: any; rateLimit: any }
     const body = await request.json()
     
     // Validar dados

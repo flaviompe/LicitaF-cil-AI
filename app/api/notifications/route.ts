@@ -6,7 +6,7 @@ import { getNotificationService } from '@/lib/notifications'
 import { z } from 'zod'
 
 const sendNotificationSchema = z.object({
-  type: z.enum(['opportunity', 'certificate', 'proposal', 'payment', 'system', 'ai_analysis']),
+  type: z.enum(['OPPORTUNITY', 'CERTIFICATE_EXPIRY', 'PROPOSAL_UPDATE', 'SYSTEM']),
   title: z.string().min(1),
   message: z.string().min(1),
   priority: z.enum(['low', 'medium', 'high', 'urgent']).optional().default('medium'),

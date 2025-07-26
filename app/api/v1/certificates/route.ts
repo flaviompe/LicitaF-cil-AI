@@ -152,11 +152,11 @@ export async function POST(request: NextRequest) {
   
   try {
     const auth = await apiService.authenticate(request, ['certificates:write'])
-    if (!auth.success) {
+    if ('error' in auth) {
       return auth as NextResponse
     }
-
-    const { apiKey, rateLimit } = auth
+    
+    const { apiKey, rateLimit } = auth as { success: boolean; apiKey: any; rateLimit: any }
     const body = await request.json()
     
     const data = createCertificateSchema.parse(body)

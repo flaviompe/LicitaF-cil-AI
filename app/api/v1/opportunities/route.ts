@@ -82,9 +82,9 @@ export async function GET(request: NextRequest) {
     }
     
     if (query.minValue || query.maxValue) {
-      where.value = {}
-      if (query.minValue) where.value.gte = query.minValue
-      if (query.maxValue) where.value.lte = query.maxValue
+      where.estimatedValue = {}
+      if (query.minValue) where.estimatedValue.gte = query.minValue
+      if (query.maxValue) where.estimatedValue.lte = query.maxValue
     }
     
     // Buscar oportunidades

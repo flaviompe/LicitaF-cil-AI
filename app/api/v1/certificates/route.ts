@@ -173,19 +173,18 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Verificar se já existe certificado com o mesmo número de série
-    const existingCert = await db.certificate.findUnique({
+    // Verificar se já existe certificado do mesmo tipo para a empresa
+    const existingCert = await db.certificate.findFirst({
       where: {
-        companyId_serialNumber: {
-          companyId: user.company.id,
-          serialNumber: data.serialNumber
-        }
+        companyId: user.company.id,
+        type: data.type,
+        status: { not: 'EXPIRED' }
       }
     })
     
     if (existingCert) {
       return NextResponse.json(
-        { error: 'Certificate with this serial number already exists' },
+        { error: 'Active certificate of this type already exists for the company' },
         { status: 409 }
       )
     }

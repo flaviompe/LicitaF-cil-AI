@@ -259,7 +259,7 @@ export async function POST(request: NextRequest) {
             id: opportunity.id,
             title: opportunity.title,
             organ: opportunity.organ,
-            value: opportunity.value,
+            estimatedValue: opportunity.estimatedValue,
             publishDate: opportunity.publishDate
           }
         })

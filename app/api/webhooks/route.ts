@@ -69,10 +69,12 @@ export async function POST(request: Request) {
       )
     }
 
-    const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional'
+    // TODO: Implementar lógica real de verificação de plano do usuário
+    // Por enquanto, assumindo Professional para todos os usuários
+    const allowWebhooks = true // Mudar para false quando implementar planos Starter
     
     // Verificar se o plano suporta webhooks
-    if (currentPlan === 'Starter') {
+    if (!allowWebhooks) {
       return NextResponse.json(
         { error: 'Webhooks disponíveis apenas nos planos Professional e Enterprise' },
         { status: 403 }

@@ -29,11 +29,11 @@ export async function GET(request: NextRequest) {
   
   try {
     const auth = await apiService.authenticate(request, ['certificates:read'])
-    if (!auth.success) {
+    if ('error' in auth) {
       return auth as NextResponse
     }
-
-    const { apiKey, rateLimit } = auth
+    
+    const { apiKey, rateLimit } = auth as { success: boolean; apiKey: any; rateLimit: any }
     const url = new URL(request.url)
     const params = Object.fromEntries(url.searchParams)
     

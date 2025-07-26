@@ -7,20 +7,17 @@ const querySchema = z.object({
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(20),
   status: z.enum(['ACTIVE', 'EXPIRED', 'REVOKED']).optional(),
-  type: z.enum(['A1', 'A3']).optional(),
+  type: z.enum(['RECEITA_FEDERAL', 'FGTS', 'INSS', 'TRABALHISTA', 'ESTADUAL', 'MUNICIPAL', 'ANVISA', 'CREA', 'OTHER']).optional(),
   expiringDays: z.coerce.number().optional()
 })
 
 const createCertificateSchema = z.object({
-  name: z.string().min(1).max(200),
-  type: z.enum(['A1', 'A3']),
-  serialNumber: z.string().min(1).max(100),
+  type: z.enum(['RECEITA_FEDERAL', 'FGTS', 'INSS', 'TRABALHISTA', 'ESTADUAL', 'MUNICIPAL', 'ANVISA', 'CREA', 'OTHER']),
   issuer: z.string().min(1).max(200),
-  subject: z.string().min(1).max(500),
-  issuedAt: z.string().datetime(),
-  expiresAt: z.string().datetime(),
-  thumbprint: z.string().optional(),
-  keyUsage: z.array(z.string()).optional()
+  issueDate: z.string().datetime(),
+  expiryDate: z.string().datetime(),
+  documentUrl: z.string().optional(),
+  observations: z.string().optional()
 })
 
 // GET /api/v1/certificates - Listar certificados
@@ -191,11 +188,15 @@ export async function POST(request: NextRequest) {
     
     const certificate = await db.certificate.create({
       data: {
-        ...data,
-        issuedAt: new Date(data.issuedAt),
-        expiresAt: new Date(data.expiresAt),
+        type: data.type,
+        issuer: data.issuer,
+        issueDate: new Date(data.issueDate),
+        expiryDate: new Date(data.expiryDate),
+        documentUrl: data.documentUrl,
+        observations: data.observations,
         companyId: user.company.id,
-        status: 'ACTIVE'
+        userId: user.id,
+        status: 'VALID'
       }
     })
     

@@ -21,11 +21,10 @@ const createOpportunitySchema = z.object({
   organ: z.string().min(1).max(200),
   publishDate: z.string().datetime(),
   openingDate: z.string().datetime(),
-  bidType: z.enum(['PREGAO_ELETRONICO', 'CONCORRENCIA', 'TOMADA_PRECO', 'CONVITE']),
-  value: z.number().positive().optional(),
-  category: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  requirements: z.array(z.string()).optional(),
+  bidType: z.enum(['PREGAO_ELETRONICO', 'PREGAO_PRESENCIAL', 'CONCORRENCIA', 'TOMADA_PRECOS', 'CONVITE', 'DISPENSA', 'INEXIGIBILIDADE']),
+  estimatedValue: z.number().positive().optional(),
+  closingDate: z.string().datetime().optional(),
+  editalLink: z.string().url().optional(),
   documents: z.array(z.object({
     name: z.string(),
     url: z.string().url()
@@ -212,9 +211,16 @@ export async function POST(request: NextRequest) {
     // Criar oportunidade
     const opportunity = await db.opportunity.create({
       data: {
-        ...data,
+        title: data.title,
+        description: data.description,
+        editalNumber: data.editalNumber,
+        organ: data.organ,
         publishDate: new Date(data.publishDate),
         openingDate: new Date(data.openingDate),
+        closingDate: data.closingDate ? new Date(data.closingDate) : null,
+        bidType: data.bidType,
+        estimatedValue: data.estimatedValue,
+        editalLink: data.editalLink,
         companyId: user.company.id,
         status: 'OPEN'
       }

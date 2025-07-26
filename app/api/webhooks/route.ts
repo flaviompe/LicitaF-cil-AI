@@ -83,16 +83,13 @@ export async function POST(request: Request) {
     
     // Verificar limites do plano
     const existingWebhooks = await apiService.getUserWebhooks(sessionUser.id)
-    const planLimits = {
-      'Professional': { maxWebhooks: 3 },
-      'Enterprise': { maxWebhooks: 20 }
-    }
     
-    const currentLimits = planLimits[currentPlan as keyof typeof planLimits]
+    // TODO: Implementar limites reais baseados no plano do usuário
+    const maxWebhooks = 20 // Assumindo Enterprise por enquanto
     
-    if (currentLimits && existingWebhooks.length >= currentLimits.maxWebhooks) {
+    if (existingWebhooks.length >= maxWebhooks) {
       return NextResponse.json(
-        { error: `Limite de ${currentLimits.maxWebhooks} webhooks atingido para o plano ${currentPlan}` },
+        { error: `Limite de ${maxWebhooks} webhooks atingido` },
         { status: 403 }
       )
     }

@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const currentPlan = 'Professional'
+    const currentPlan: 'Starter' | 'Professional' | 'Enterprise' = 'Professional'
     
     // Verificar se o plano suporta webhooks
     if (currentPlan === 'Starter') {

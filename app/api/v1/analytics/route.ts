@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
           ? (proposals.length / opportunities.length) * 100
           : 0,
         averageProposalValue: proposals.length > 0
-          ? proposals.reduce((sum, p) => sum + (p.opportunity?.value || 0), 0) / proposals.length
+          ? proposals.reduce((sum, p) => sum + (p.opportunity?.estimatedValue || 0), 0) / proposals.length
           : 0
       }
     }

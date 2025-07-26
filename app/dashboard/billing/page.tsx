@@ -18,27 +18,9 @@ export default async function BillingPage() {
   const user = await db.user.findUnique({
     where: { id: session.user.id },
     include: {
-      subscriptions: {
-        include: {
-          plan: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-        take: 1,
-      },
-      payments: {
-        orderBy: {
-          createdAt: 'desc',
-        },
-        take: 10,
-      },
-      invoices: {
-        orderBy: {
-          createdAt: 'desc',
-        },
-        take: 10,
-      },
+      // TODO: Adicionar subscriptions quando o modelo for criado no schema
+      // TODO: Adicionar payments quando o modelo for criado no schema
+      // TODO: Adicionar invoices quando o modelo for criado no schema
     },
   })
 
@@ -46,8 +28,9 @@ export default async function BillingPage() {
     redirect('/login')
   }
 
-  const currentSubscription = user.subscriptions[0]
-  const hasActiveSubscription = currentSubscription && currentSubscription.status === 'ACTIVE'
+  // TODO: Implementar lógica real de subscriptions quando o modelo for criado
+  const currentSubscription = null // Mock temporário
+  const hasActiveSubscription = false // Mock temporário
 
   return (
     <div className="space-y-8">
@@ -75,7 +58,7 @@ export default async function BillingPage() {
           <SubscriptionDetails subscription={currentSubscription} />
           
           {/* Histórico de pagamentos */}
-          <PaymentHistory payments={user.payments} />
+          <PaymentHistory payments={[]} />
         </div>
 
         {/* Coluna direita */}
@@ -86,7 +69,7 @@ export default async function BillingPage() {
           )}
           
           {/* Histórico de faturas */}
-          <InvoiceHistory invoices={user.invoices} />
+          <InvoiceHistory invoices={[]} />
         </div>
       </div>
 

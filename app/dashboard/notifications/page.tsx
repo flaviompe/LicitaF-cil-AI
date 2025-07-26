@@ -32,16 +32,8 @@ export default async function NotificationsPage() {
   const user = await db.user.findUnique({
     where: { id: session.user.id },
     include: {
-      company: true,
-      subscriptions: {
-        include: {
-          plan: true,
-        },
-        take: 1,
-        orderBy: {
-          createdAt: 'desc'
-        }
-      }
+      company: true
+      // TODO: Adicionar subscriptions quando o modelo for criado no schema
     }
   })
 
@@ -49,7 +41,8 @@ export default async function NotificationsPage() {
     redirect('/login')
   }
 
-  const currentPlan = user.subscriptions[0]?.plan?.name || 'Starter'
+  // TODO: Implementar lógica real de planos quando o modelo subscription for criado
+  const currentPlan = 'Professional' // Mock temporário
 
   // Simular dados de notificação
   const notificationStats = {

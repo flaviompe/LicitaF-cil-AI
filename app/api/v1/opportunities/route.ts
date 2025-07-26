@@ -103,9 +103,8 @@ export async function GET(request: NextRequest) {
           bidType: true,
           estimatedValue: true,
           status: true,
-          category: true,
-          tags: true,
-          requirements: true,
+          editalLink: true,
+          closingDate: true,
           createdAt: true,
           updatedAt: true
         },
